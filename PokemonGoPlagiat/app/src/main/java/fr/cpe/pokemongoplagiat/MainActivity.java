@@ -1,29 +1,70 @@
 package fr.cpe.pokemongoplagiat;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import fr.cpe.pokemongoplagiat.databinding.ActivityMainBindingImpl;
+
+import fr.cpe.pokemongoplagiat.databinding.ActivityMainBinding;
+import fr.cpe.pokemongoplagiat.generated.callback.OnClickListener;
+import fr.cpe.pokemongoplagiat.interfaces.OnClickOnMenuListener;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnNoteListener;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnPokemonFromListListener;
 import fr.cpe.pokemongoplagiat.models.Pokemon;
 
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Toast;
+
+import com.google.android.material.navigation.NavigationBarView;
+import com.google.android.material.navigation.NavigationView;
+
+import org.osmdroid.config.Configuration;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ActivityMainBindingImpl binding;
+    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        setContentView(R.layout.activity_main);
         showStartup();
+
+        if (ActivityCompat.checkSelfPermission( this,
+                Manifest.permission.ACCESS_FINE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED) {
+            String[] permissions =
+                    {Manifest.permission.ACCESS_FINE_LOCATION};
+            ActivityCompat.requestPermissions(this,
+                    permissions,1);
+        }
+
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        View decorView = getWindow().getDecorView();
+
+        int uiOptions = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+
+
+
+        //setContentView(R.layout.activity_main);
+
     }
 
 
@@ -46,6 +87,9 @@ public class MainActivity extends AppCompatActivity {
                 toast.show();
             }
         };
+
+
+
         //Details of One pokemon
         OnClickOnPokemonFromListListener listener_one_pokemon = new OnClickOnPokemonFromListListener(){
             @Override
@@ -62,6 +106,52 @@ public class MainActivity extends AppCompatActivity {
                 transaction.commit();
             }
         };
+
+        OnClickOnMenuListener listener_on_menu = new OnClickOnMenuListener() {
+            @Override
+            public void onClickOnItem(int index) {
+                FragmentTransaction transaction = manager.beginTransaction();
+                // First, get the context of the current activity or application
+                if(index == 0)
+                {
+                    PokedexFragment fragment = new PokedexFragment();
+                    fragment.setOnClickOnNoteListener(listener);
+                    fragment.setOnClickOnPokemonFromListListener(listener_one_pokemon);
+                    transaction.replace(R.id.fragment_container,fragment);
+                    transaction.commit();
+                }
+
+            }
+        };
+
+        binding.bottomNavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                FragmentTransaction transaction = manager.beginTransaction();
+                // First, get the context of the current activity or application
+
+                if(item.getItemId() == R.id.menu)
+                {
+                    PokedexFragment fragment = new PokedexFragment();
+                    fragment.setOnClickOnNoteListener(listener);
+                    fragment.setOnClickOnPokemonFromListListener(listener_one_pokemon);
+                    transaction.replace(R.id.fragment_container,fragment);
+                    transaction.commit();
+                    return true;
+                }
+                if(item.getItemId() == R.id.maps)
+                {
+                    PokemonMapFragment fragment = new PokemonMapFragment();
+                    transaction.replace(R.id.fragment_container,fragment);
+                    transaction.commit();
+                    return true;
+                }
+                return false;
+            }
+
+
+        });
+
 
         FragmentTransaction transaction = manager.beginTransaction();
 

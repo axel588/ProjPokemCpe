@@ -10,6 +10,10 @@ public class Pokemon {
     private int frontResource;
     private POKEMON_TYPE type1;
     private POKEMON_TYPE type2;
+
+    private int type1_img;
+    private int type2_img;
+
     public Pokemon() {
         order = 1;
         name = "Unknown";
@@ -17,12 +21,14 @@ public class Pokemon {
         type1 = POKEMON_TYPE.Plante;
     }
     public Pokemon(int order, String name, int frontResource,
-                   POKEMON_TYPE type1, POKEMON_TYPE type2) {
+                   POKEMON_TYPE type1, POKEMON_TYPE type2, int type1_img, int type2_img) {
         this.order = order;
         this.name = name;
         this.frontResource = frontResource;
         this.type1 = type1;
         this.type2 = type2;
+        this.type1_img = type1_img;
+        this.type2_img = type2_img;
     }
 
     public String getName() {
@@ -73,4 +79,17 @@ public class Pokemon {
     public String getType2String() {
         return type2.name();
     }
+
+
+    public int getType1Img() {
+        return type1_img;
+    }
+    public void setType1Img(int type1_img) {
+        this.type1_img = type1_img;
+    }
+    public int getType2Img() {
+        return type2_img;
+    }
+    public void setType2Img(int type2_img) {this.type2_img = type2_img;}
+
 }

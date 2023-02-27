@@ -33,7 +33,7 @@ import fr.cpe.pokemongoplagiat.models.Pokemon;
 public class PokedexFragment extends Fragment {
     @Nullable
 
-    private static Map<String, String> typeConversion = new HashMap<>();
+    private static final Map<String, String> typeConversion = new HashMap<>();
         static {
             typeConversion.put("normal", "Normal");
             typeConversion.put("fighting", "Combat");
@@ -112,6 +112,8 @@ public class PokedexFragment extends Fragment {
         try {
             JSONArray array = new JSONArray(builder.toString());
             for (int i = 0; i < array.length(); i++) {
+                int idtype1 = -1;
+                int idtype2 = -1;
                 JSONObject object = array.getJSONObject(i);
                 String name = object.getString("name");
                 String image = object.getString("image");
@@ -129,9 +131,21 @@ public class PokedexFragment extends Fragment {
                 {
                     pokemon.setType2(POKEMON_TYPE.valueOf(typeConversion.get(type2)));
                 }
+                if (type1 != null) {
+                    idtype1 = getResources().getIdentifier(type1, "drawable",
+                            binding.getRoot().getContext().getPackageName());
+                }
+                if (type2 != null) {
+                    idtype2 = getResources().getIdentifier(type2, "drawable",
+                            binding.getRoot().getContext().getPackageName());
+                }
+
 
                 int id = getResources().getIdentifier(image,"drawable",
                         binding.getRoot().getContext().getPackageName());
+
+                pokemon.setType1Img(idtype1);
+                pokemon.setType2Img(idtype2);
 
                 pokemon.setFrontResource(id);
                 pokemonList.add(pokemon);

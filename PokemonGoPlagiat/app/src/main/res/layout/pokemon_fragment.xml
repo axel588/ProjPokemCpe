@@ -9,19 +9,26 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:background="#FF0000"
+        android:background="#555555"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
         <ImageView
             android:id="@+id/front"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:src="@{pokemonDetailsViewModel.getImage(context,pokemonDetailsViewModel.front)}"
 
-            app:layout_constraintBottom_toTopOf="@id/separator"
-            android:scaleType="centerInside"
-            app:layout_constraintEnd_toStartOf="@id/name"
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/img_type"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@{pokemonDetailsViewModel.getImage(context,pokemonDetailsViewModel.front)}"
+
+            android:scaleType="fitCenter"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
         <TextView
@@ -29,29 +36,55 @@
             android:id="@+id/name"
             android:text="@{pokemonDetailsViewModel.name}"
             app:layout_constraintStart_toEndOf="@id/front"
-            app:layout_constraintEnd_toStartOf="@id/number"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/type1_text"
+            android:gravity="center"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"/>
+            android:layout_height="100dp"
+            android:textSize="30dp"
+            android:textColor="#EEEEEE"/>
         <TextView
             android:id="@+id/type1_text"
             android:text="@{pokemonDetailsViewModel.type1}"
-            app:layout_constraintStart_toEndOf="@id/front"
-            app:layout_constraintEnd_toStartOf="@id/type2_text"
-            app:layout_constraintBottom_toTopOf="@id/separator"
-            app:layout_constraintTop_toBottomOf="@id/name"
+            app:layout_constraintStart_toEndOf="@id/type1_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/front"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:textColor="#EEEEEE"
+            />
+        <TextView
+            android:id="@+id/type1_label"
+            android:text="type 1 :"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/front"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            android:textColor="#EEEEEE"
+            />
+
+        <TextView
+            android:id="@+id/type2_label"
+            android:text="type 2 :"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/type1_text"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:textColor="#EEEEEE"
+            android:textSize="20dp"/>
+
         <TextView
             android:id="@+id/type2_text"
             android:text="@{pokemonDetailsViewModel.type2}"
-            app:layout_constraintStart_toEndOf="@id/type1_text"
-            app:layout_constraintEnd_toStartOf="@id/number"
-            app:layout_constraintBottom_toTopOf="@id/separator"
-            app:layout_constraintTop_toBottomOf="@id/name"
+            app:layout_constraintStart_toEndOf="@id/type2_label"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/type1_text"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:textColor="#EEEEEE"
+            android:textSize="20dp"/>
         <TextView
             android:id="@+id/number"
             android:text="@{pokemonDetailsViewModel.number}"

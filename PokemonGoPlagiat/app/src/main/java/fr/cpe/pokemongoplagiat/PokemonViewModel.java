@@ -43,6 +43,14 @@ public class PokemonViewModel extends BaseObservable {
             this.onClickOnPokemonFromListListener.onClickOnNote(pokemon);
         }
     }
+
+    @Bindable
+    public int getIdType1() {return pokemon.getType1Img();}
+    @Bindable
+    public int getIdType2() {
+        return pokemon.getType2Img();
+    }
+
     @Bindable
     public int getFront() {
         return pokemon.getFrontResource();
@@ -61,6 +69,23 @@ public class PokemonViewModel extends BaseObservable {
             return pokemon.getType2String();
         return "";
     }
+
+    public Drawable getType2Img(Context context, int res) {
+        if(res != -1)
+            return ResourcesCompat.getDrawable(context.getResources(),
+                    res, context.getTheme());
+        else
+            return null;
+    }
+
+    public Drawable getType1Img(Context context, int res) {
+        if(res != -1)
+            return ResourcesCompat.getDrawable(context.getResources(),
+                    res, context.getTheme());
+        else
+            return null;
+    }
+
 
     @Bindable
     public String getNumber() {

@@ -64,8 +64,8 @@ public class PokemonListAdapter extends
         return pokemonList.size();
     }
     static class ViewHolder extends RecyclerView.ViewHolder {
-        private PokemonItemBinding binding;
-        private PokemonViewModel viewModel = new PokemonViewModel();
+        private final PokemonItemBinding binding;
+        private final PokemonViewModel viewModel = new PokemonViewModel();
         ViewHolder(PokemonItemBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
