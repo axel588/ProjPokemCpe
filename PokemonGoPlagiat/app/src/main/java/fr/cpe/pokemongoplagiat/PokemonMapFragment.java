@@ -3,6 +3,7 @@ package fr.cpe.pokemongoplagiat;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -34,6 +35,7 @@ import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import fr.cpe.pokemongoplagiat.databinding.PokemonFragmentBinding;
 import fr.cpe.pokemongoplagiat.databinding.PokemonMapBinding;
@@ -209,11 +211,27 @@ public class PokemonMapFragment extends Fragment {
 
                     binding.mapView.getOverlays().clear();
 
+                    // Display a Pokemon marker at the specified location
+                    Marker pokemonMarker = new Marker(binding.mapView);
+                    GeoPoint pokemonPoint = new GeoPoint(latitude, longitude);
+                    Drawable persoIcon = ContextCompat.getDrawable(getContext(), org.osmdroid.library.R.drawable.person); // assuming you have a Pokemon icon in your drawable folder
+                    pokemonMarker.setIcon(persoIcon);
+                    pokemonMarker.setPosition(pokemonPoint);
+                    binding.mapView.getOverlays().add(pokemonMarker);
+
                     //On vérifie les marqueurs dans un rayon de 1km
                     for (GeoPoint point : points) {
                         if (point.distanceToAsDouble(new GeoPoint(latitude, longitude)) <= 1000) {
                             Marker marker = new Marker(binding.mapView);
+
+                            int pokemonId = 1 + new Random().nextInt(50 - 1 + 1);
+                            String iconName = "p" + pokemonId;
+                            int iconResourceId = getResources().getIdentifier(iconName, "drawable", getContext().getPackageName());
+                            Drawable pokeIcon = ContextCompat.getDrawable(getContext(), iconResourceId);
+
                             marker.setPosition(point);
+                            // assuming you have a Pokemon icon in your drawable folder
+                            marker.setIcon(pokeIcon);
                             binding.mapView.getOverlays().add(marker);
                         }
                     }

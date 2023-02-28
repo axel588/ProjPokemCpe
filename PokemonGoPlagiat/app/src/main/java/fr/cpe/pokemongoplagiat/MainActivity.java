@@ -6,9 +6,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.room.Room;
 
 import fr.cpe.pokemongoplagiat.databinding.ActivityMainBinding;
-import fr.cpe.pokemongoplagiat.generated.callback.OnClickListener;
+//import fr.cpe.pokemongoplagiat.generated.callback.OnClickListener;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnMenuListener;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnNoteListener;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnPokemonFromListListener;
@@ -44,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         showStartup();
+
+        AppDatabase db = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "poke-plagiat").build();
 
         if (ActivityCompat.checkSelfPermission( this,
                 Manifest.permission.ACCESS_FINE_LOCATION) !=
