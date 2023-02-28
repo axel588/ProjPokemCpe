@@ -9,6 +9,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import fr.cpe.pokemongoplagiat.databinding.ActivityMainBinding;
 import fr.cpe.pokemongoplagiat.generated.callback.OnClickListener;
+import fr.cpe.pokemongoplagiat.interfaces.OnClickOnAnnulerListener;
+import fr.cpe.pokemongoplagiat.interfaces.OnClickOnFuireListener;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnMenuListener;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnNoteListener;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnPokemonFromListListener;
@@ -143,6 +145,54 @@ public class MainActivity extends AppCompatActivity {
                 {
                     PokemonMapFragment fragment = new PokemonMapFragment();
                     transaction.replace(R.id.fragment_container,fragment);
+                    transaction.commit();
+                    return true;
+                }
+                if (item.getItemId() == R.id.inventory)
+                {
+                    AttaqueFragment fragment = new AttaqueFragment();
+
+
+                    OnClickOnFuireListener FuireListnerAgent = new OnClickOnFuireListener ()
+                    {
+                        @Override
+                        public void onClickOnFuire()
+                        {
+                            FragmentTransaction transaction = manager.beginTransaction();
+                            PokemonMapFragment fragment = new PokemonMapFragment();
+                            transaction.replace(R.id.fragment_container,fragment);
+                            binding.bottomNavigation.setSelectedItemId(R.id.maps);
+                            transaction.commit();
+                        }
+                    };
+
+                    fragment.setOnClickOnFuireListener(FuireListnerAgent);
+                    transaction.replace(R.id.fragment_container,fragment);
+
+                    transaction.commit();
+                    return true;
+                }
+                if (item.getItemId() == R.id.mes_pokemon)
+                {
+                    AttaqueFragment fragment = new AttaqueFragment();
+
+
+                    OnClickOnFuireListener FuireListnerAgent = new OnClickOnFuireListener ()
+                    {
+                        @Override
+                        public void onClickOnFuire()
+                        {
+                            FragmentTransaction transaction = manager.beginTransaction();
+                            PokemonMapFragment fragment = new PokemonMapFragment();
+                            transaction.replace(R.id.fragment_container,fragment);
+                            binding.bottomNavigation.setSelectedItemId(R.id.maps);
+                            transaction.commit();
+                        }
+                    };
+
+                    fragment.setOnClickOnFuireListener(FuireListnerAgent);
+                    transaction.replace(R.id.fragment_container,fragment);
+
                     transaction.commit();
                     return true;
                 }

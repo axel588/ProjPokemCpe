@@ -17,4 +17,10 @@
         android:enabled="true"
         android:icon="@drawable/inventory"
         android:title="Inventory"/>
+
+    <item
+        android:id="@+id/mes_pokemon"
+        android:enabled="true"
+        android:icon="@drawable/acier"
+        android:title="Mes Pokémon"/>
 </menu>

@@ -36,6 +36,29 @@ public class PokemonDetailsViewModel extends BaseObservable {
             return pokemon.getType2String();
         return "";
     }
+    @Bindable
+    public int getIdType1() {return pokemon.getType1Img();}
+    @Bindable
+    public int getIdType2() {
+        return pokemon.getType2Img();
+    }
+
+    public Drawable getType2Img(Context context, int res) {
+        if(res != -1)
+            return ResourcesCompat.getDrawable(context.getResources(),
+                    res, context.getTheme());
+        else
+            return null;
+    }
+
+    public Drawable getType1Img(Context context, int res) {
+        if(res != -1)
+            return ResourcesCompat.getDrawable(context.getResources(),
+                    res, context.getTheme());
+        else
+            return null;
+    }
+
 
     @Bindable
     public String getNumber() {

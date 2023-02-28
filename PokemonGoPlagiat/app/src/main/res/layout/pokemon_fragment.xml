@@ -6,6 +6,7 @@
         <variable
             name="pokemonDetailsViewModel"
             type="fr.cpe.pokemongoplagiat.PokemonDetailsViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,6 +32,30 @@
             android:scaleType="fitCenter"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/type1_img"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/type1_text"
+            android:src="@{pokemonDetailsViewModel.getType1Img(context,pokemonDetailsViewModel.getIdType1())}"
+            android:scaleType="centerInside"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="15dp"
+            />
+
+        <ImageView
+            android:id="@+id/type2_img"
+            app:layout_constraintEnd_toStartOf="@id/type1_img"
+            app:layout_constraintBottom_toTopOf="@id/type1_text"
+            android:src="@{pokemonDetailsViewModel.getType2Img(context,pokemonDetailsViewModel.getIdType2())}"
+            android:scaleType="centerInside"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="5dp"
+
+            />
+
         <TextView
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:id="@+id/name"
