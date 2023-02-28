@@ -7,8 +7,7 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
-import fr.cpe.pokemongoplagiat.interfaces.OnClickOnNoteListener;
-import fr.cpe.pokemongoplagiat.models.Pokemon;
+import fr.cpe.pokemongoplagiat.bddmodels.Pokemon;
 
 public class PokemonDetailsViewModel extends BaseObservable {
     private Pokemon pokemon = new Pokemon();
@@ -20,7 +19,7 @@ public class PokemonDetailsViewModel extends BaseObservable {
 
     @Bindable
     public int getFront() {
-        return pokemon.getFrontResource();
+        return pokemon.getFrontRessourceInt();
     }
     @Bindable
     public String getName() {
@@ -32,7 +31,7 @@ public class PokemonDetailsViewModel extends BaseObservable {
     }
     @Bindable
     public String getType2() {
-        if (pokemon.getType2() != null)
+        if (pokemon.getType2_() != null)
             return pokemon.getType2String();
         return "";
     }

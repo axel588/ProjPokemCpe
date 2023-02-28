@@ -9,26 +9,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import fr.cpe.pokemongoplagiat.databinding.PokedexFragmentBinding;
+import fr.cpe.pokemongoplagiat.bddmodels.Pokemon;
 import fr.cpe.pokemongoplagiat.databinding.PokemonFragmentBinding;
-import fr.cpe.pokemongoplagiat.interfaces.OnClickOnNoteListener;
-import fr.cpe.pokemongoplagiat.interfaces.OnClickOnPokemonFromListListener;
-import fr.cpe.pokemongoplagiat.models.POKEMON_TYPE;
-import fr.cpe.pokemongoplagiat.models.Pokemon;
 
 public class PokemonFragment extends Fragment {
 

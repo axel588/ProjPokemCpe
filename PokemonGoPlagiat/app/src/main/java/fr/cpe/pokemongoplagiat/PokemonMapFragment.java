@@ -4,8 +4,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
@@ -27,7 +25,6 @@ import androidx.fragment.app.Fragment;
 
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
-import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
@@ -37,9 +34,7 @@ import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 import java.util.ArrayList;
 import java.util.Random;
 
-import fr.cpe.pokemongoplagiat.databinding.PokemonFragmentBinding;
 import fr.cpe.pokemongoplagiat.databinding.PokemonMapBinding;
-import fr.cpe.pokemongoplagiat.models.Pokemon;
 
 public class PokemonMapFragment extends Fragment {
 

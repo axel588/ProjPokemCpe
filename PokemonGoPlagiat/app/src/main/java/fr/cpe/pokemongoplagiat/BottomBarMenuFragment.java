@@ -11,8 +11,6 @@ import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 
 import fr.cpe.pokemongoplagiat.databinding.ActivityMainBinding;
-import fr.cpe.pokemongoplagiat.databinding.PokemonFragmentBinding;
-import fr.cpe.pokemongoplagiat.models.Pokemon;
 
 public class BottomBarMenuFragment  extends Fragment {
 

@@ -10,6 +10,7 @@ import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.room.Room;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -23,12 +24,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
+import fr.cpe.pokemongoplagiat.bdddao.PokemonDao;
+import fr.cpe.pokemongoplagiat.bddmodels.Pokemon;
 import fr.cpe.pokemongoplagiat.databinding.PokedexFragmentBinding;
 
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnNoteListener;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnPokemonFromListListener;
 import fr.cpe.pokemongoplagiat.models.POKEMON_TYPE;
-import fr.cpe.pokemongoplagiat.models.Pokemon;
 
 public class PokedexFragment extends Fragment {
     @Nullable
@@ -125,11 +127,11 @@ public class PokedexFragment extends Fragment {
                 pokemon.setName(name);
                 if(type1!=null)
                 {
-                    pokemon.setType1(POKEMON_TYPE.valueOf(typeConversion.get(type1)));
+                    pokemon.setType1_(POKEMON_TYPE.valueOf(typeConversion.get(type1)));
                 }
                 if(type2!=null)
                 {
-                    pokemon.setType2(POKEMON_TYPE.valueOf(typeConversion.get(type2)));
+                    pokemon.setType2_(POKEMON_TYPE.valueOf(typeConversion.get(type2)));
                 }
                 if (type1 != null) {
                     idtype1 = getResources().getIdentifier(type1, "drawable",
@@ -147,7 +149,7 @@ public class PokedexFragment extends Fragment {
                 pokemon.setType1Img(idtype1);
                 pokemon.setType2Img(idtype2);
 
-                pokemon.setFrontResource(id);
+                pokemon.setFrontRessource((long)id);
                 pokemonList.add(pokemon);
             }
         } catch (JSONException e) {

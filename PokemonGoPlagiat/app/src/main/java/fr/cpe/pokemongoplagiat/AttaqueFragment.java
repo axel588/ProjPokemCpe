@@ -2,27 +2,20 @@ package fr.cpe.pokemongoplagiat;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.material.navigation.NavigationBarView;
-
-import fr.cpe.pokemongoplagiat.databinding.ActivityMainBinding;
+import fr.cpe.pokemongoplagiat.bddmodels.Pokemon;
 import fr.cpe.pokemongoplagiat.databinding.AttaqueFragmentBinding;
-import fr.cpe.pokemongoplagiat.databinding.PokemonFragmentBinding;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnAnnulerListener;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnAttaqueListener;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnFuireListener;
 import fr.cpe.pokemongoplagiat.models.POKEMON_TYPE;
-import fr.cpe.pokemongoplagiat.models.Pokemon;
 
 public class AttaqueFragment extends Fragment {
 
@@ -42,17 +35,17 @@ public class AttaqueFragment extends Fragment {
         Pokemon pokemonAttaque = new Pokemon();
 
         monPokemon.setName("bulbizar");
-        monPokemon.setFrontResource(getResources().getIdentifier("p1","drawable",
+        monPokemon.setFrontRessource((long)getResources().getIdentifier("p1","drawable",
                 binding.getRoot().getContext().getPackageName()));
-        monPokemon.setType1(POKEMON_TYPE.Acier);
-        monPokemon.setType2(POKEMON_TYPE.Feu);
+        monPokemon.setType1_(POKEMON_TYPE.Acier);
+        monPokemon.setType2_(POKEMON_TYPE.Feu);
         monPokemon.setType1Img(R.drawable.acier);
         monPokemon.setType2Img(R.drawable.feu);
 
         pokemonAttaque.setName("totogro");
-        pokemonAttaque.setFrontResource(getResources().getIdentifier("p10","drawable",
+        pokemonAttaque.setFrontRessource((long)getResources().getIdentifier("p10","drawable",
                 binding.getRoot().getContext().getPackageName()));
-        pokemonAttaque.setType1(POKEMON_TYPE.Glace);
+        pokemonAttaque.setType1_(POKEMON_TYPE.Glace);
         pokemonAttaque.setType1Img(R.drawable.glace);
 
 

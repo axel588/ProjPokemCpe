@@ -1,5 +1,7 @@
 package fr.cpe.pokemongoplagiat.models;
 
+import fr.cpe.pokemongoplagiat.bddmodels.Pokemon;
+
 public class OwnedPokemon extends Pokemon {
     public int getPv() {
         return pv;
