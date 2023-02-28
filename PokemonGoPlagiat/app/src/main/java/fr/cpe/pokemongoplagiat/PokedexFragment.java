@@ -151,6 +151,13 @@ public class PokedexFragment extends Fragment {
 
                 pokemon.setFrontRessource((long)id);
                 pokemonList.add(pokemon);
+
+                AppDatabase db = Room.databaseBuilder(binding.getRoot().getContext(),
+                        AppDatabase.class, "poke-plagiat").build();
+
+
+                //PokemonDao pokemonDao = db.pokemonDao();
+                //pokemonList = pokemonDao.getAll();
             }
         } catch (JSONException e) {
             e.printStackTrace();
