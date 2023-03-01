@@ -25,4 +25,7 @@ public interface AttackDao {
 
     @Delete
     void delete(Attack attack);
+
+    @Query("DELETE FROM Attack")
+    public void deleteAll();
 }

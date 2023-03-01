@@ -7,14 +7,13 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
+import fr.cpe.pokemongoplagiat.bddmodels.Pokemon;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnAnnulerListener;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnAttaqueListener;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnAttaquerPokemonListener;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnEchangerListener;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnFuireListener;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnInventaireListener;
-import fr.cpe.pokemongoplagiat.interfaces.OnClickOnNoteListener;
-import fr.cpe.pokemongoplagiat.models.Pokemon;
 
 public class AttaqueViewModel extends BaseObservable {
 
@@ -120,7 +119,7 @@ public class AttaqueViewModel extends BaseObservable {
 
     public Drawable getPokemonAttaqueFront(Context context) {
         return ResourcesCompat.getDrawable(context.getResources(),
-                pokemonAttaque.getFrontResource(), context.getTheme());
+                pokemonAttaque.getFrontRessourceInt(), context.getTheme());
     }
 
     public void RunArgent()
@@ -138,7 +137,7 @@ public class AttaqueViewModel extends BaseObservable {
 
     @Bindable
     public String getPokemonAttaqueType2() {
-        if (pokemonAttaque.getType2() != null)
+        if (pokemonAttaque.getType2_() != null)
             return pokemonAttaque.getType2String();
         return "";
     }
@@ -168,7 +167,7 @@ public class AttaqueViewModel extends BaseObservable {
 
     public Drawable getMyPokemonFront(Context context) {
         return ResourcesCompat.getDrawable(context.getResources(),
-                myPokemon.getFrontResource(), context.getTheme());
+                myPokemon.getFrontRessourceInt(), context.getTheme());
     }
 
     @Bindable
@@ -181,7 +180,7 @@ public class AttaqueViewModel extends BaseObservable {
     }
     @Bindable
     public String getMyPokemonType2() {
-        if (pokemonAttaque.getType2() != null)
+        if (pokemonAttaque.getType2_() != null)
             return pokemonAttaque.getType2String();
         return "";
     }

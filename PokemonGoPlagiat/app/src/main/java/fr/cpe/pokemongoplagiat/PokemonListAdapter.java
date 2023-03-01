@@ -9,11 +9,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
+import fr.cpe.pokemongoplagiat.bddmodels.Pokemon;
 import fr.cpe.pokemongoplagiat.databinding.PokemonItemBinding;
 
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnNoteListener;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnPokemonFromListListener;
-import fr.cpe.pokemongoplagiat.models.Pokemon;
 
 public class PokemonListAdapter extends
         RecyclerView.Adapter<PokemonListAdapter.ViewHolder> {

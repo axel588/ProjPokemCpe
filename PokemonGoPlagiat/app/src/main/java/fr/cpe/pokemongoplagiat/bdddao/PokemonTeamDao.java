@@ -23,4 +23,7 @@ public interface PokemonTeamDao {
 
     @Delete
     void delete(PokemonTeam pokemonTeam);
+
+    @Query("DELETE FROM PokemonTeam")
+    public void deleteAll();
 }

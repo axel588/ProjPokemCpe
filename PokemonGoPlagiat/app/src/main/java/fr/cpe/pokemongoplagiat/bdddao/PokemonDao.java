@@ -25,4 +25,8 @@ public interface PokemonDao {
 
     @Delete
     void delete(Pokemon pokemon);
+
+    @Query("DELETE FROM Pokemon")
+    public void deleteAll();
+
 }
