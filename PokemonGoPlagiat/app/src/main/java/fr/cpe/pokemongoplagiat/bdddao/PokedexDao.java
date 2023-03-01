@@ -23,4 +23,7 @@ public interface PokedexDao {
 
     @Delete
     void delete(Pokedex pokedex);
+
+    @Query("DELETE FROM Pokedex")
+    public void deleteAll();
 }

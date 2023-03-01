@@ -23,4 +23,7 @@ public interface OwnedPokemonDao {
 
     @Delete
     void delete(OwnedPokemon ownedPokemon);
+
+    @Query("DELETE FROM OwnedPokemon")
+    public void deleteAll();
 }

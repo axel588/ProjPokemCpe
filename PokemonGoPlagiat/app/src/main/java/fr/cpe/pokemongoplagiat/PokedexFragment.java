@@ -21,8 +21,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
 
 import fr.cpe.pokemongoplagiat.bdddao.PokemonDao;
 import fr.cpe.pokemongoplagiat.bddmodels.Pokemon;
@@ -95,7 +101,7 @@ public class PokedexFragment extends Fragment {
         List<Pokemon> pokemonList = new ArrayList<>();
 
 
-        InputStreamReader isr = new InputStreamReader(getResources().openRawResource(R.raw.data));
+        /*InputStreamReader isr = new InputStreamReader(getResources().openRawResource(R.raw.data));
 
 
         BufferedReader reader = new BufferedReader(isr);
@@ -161,7 +167,44 @@ public class PokedexFragment extends Fragment {
             }
         } catch (JSONException e) {
             e.printStackTrace();
+        }*/
+
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        FutureTask<List<Pokemon>> futureTask = new FutureTask<>(new Callable<List<Pokemon>>() {
+            @Override
+            public List<Pokemon> call() throws Exception {
+                AppDatabase db = Room.databaseBuilder(binding.getRoot().getContext(),
+                        AppDatabase.class, "poke-plagiat").build();
+                PokemonDao pokemonDao = db.pokemonDao();
+                List<Pokemon> allpokemon = pokemonDao.getAll();
+                for(int m = 0;m<allpokemon.size();m++)
+                {
+                    Pokemon poke = allpokemon.get(m);
+                    poke.setType2_(POKEMON_TYPE.valueOf((int)poke.getType2()));
+                    poke.setType1_(POKEMON_TYPE.valueOf((int)poke.getType1()));
+                    int idtype1 = getResources().getIdentifier(POKEMON_TYPE.valueOf((int)poke.getType1()).name().toLowerCase(), "drawable",
+                        binding.getRoot().getContext().getPackageName());
+                    int idtype2 = getResources().getIdentifier(POKEMON_TYPE.valueOf((int)poke.getType2()).name().toLowerCase(), "drawable",
+                            binding.getRoot().getContext().getPackageName());
+                    poke.setType1_img(idtype1);
+                    poke.setType2_img(idtype2);
+                    allpokemon.set(m, poke);
+
+                }
+                return allpokemon;
+            }
+        });
+
+        executor.execute(futureTask);
+
+        try {
+            pokemonList = futureTask.get();
+        } catch (InterruptedException | ExecutionException e) {
+            // Handle any exceptions that occurred while executing the task
         }
+
+// Don't forget to shutdown the executor when it's no longer needed
+        executor.shutdown();
 
         PokemonListAdapter adapter = new PokemonListAdapter(pokemonList);
         adapter.setOnClickOnNoteListener(this.listener);

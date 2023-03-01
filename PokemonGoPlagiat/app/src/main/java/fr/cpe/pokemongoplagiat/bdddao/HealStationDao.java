@@ -23,4 +23,7 @@ public interface HealStationDao {
 
     @Delete
     void delete(HealStation healStation);
+
+    @Query("DELETE FROM HealStation")
+    public void deleteAll();
 }
