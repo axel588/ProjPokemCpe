@@ -276,7 +276,7 @@ public class MainActivity extends AppCompatActivity {
         {
 
             Pokemon newPokemona = new Pokemon();
-            newPokemona.setId(0);
+            //newPokemona.setId(0);
             newPokemona.setName("Mirai");
             newPokemona.setWeight(8);
             newPokemona.setFrontRessource(R.drawable.p30);
@@ -287,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
 
 
             Pokemon newPokemon = new Pokemon();
-            newPokemon.setId(1);
+            //newPokemon.setId(1);
             newPokemon.setName("Pikachu");
             newPokemon.setWeight(8);
             newPokemon.setFrontRessource(R.drawable.p1);
@@ -298,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
 
 
             newPokemon = new Pokemon();
-            newPokemon.setId(2);
+            //newPokemon.setId(2);
             newPokemon.setName("Pokemouille");
             newPokemon.setWeight(2);
             newPokemon.setFrontRessource(R.drawable.p2);
@@ -308,7 +308,7 @@ public class MainActivity extends AppCompatActivity {
             pokemonDao.insertAll(newPokemon);
 
             newPokemon = new Pokemon();
-            newPokemon.setId(3);
+            //newPokemon.setId(3);
             newPokemon.setName("Ratatouille");
             newPokemon.setWeight(80);
             newPokemon.setFrontRessource(R.drawable.p3);
@@ -318,7 +318,7 @@ public class MainActivity extends AppCompatActivity {
             pokemonDao.insertAll(newPokemon);
 
             newPokemon = new Pokemon();
-            newPokemon.setId(4);
+            //newPokemon.setId(4);
             newPokemon.setName("Zoro");
             newPokemon.setWeight(5);
             newPokemon.setFrontRessource(R.drawable.p4);
@@ -328,7 +328,7 @@ public class MainActivity extends AppCompatActivity {
             pokemonDao.insertAll(newPokemon);
 
             newPokemon = new Pokemon();
-            newPokemon.setId(5);
+            //newPokemon.setId(5);
             newPokemon.setName("Asperguer");
             newPokemon.setWeight(58);
             newPokemon.setFrontRessource(R.drawable.p5);
@@ -338,7 +338,7 @@ public class MainActivity extends AppCompatActivity {
             pokemonDao.insertAll(newPokemon);
 
             newPokemon = new Pokemon();
-            newPokemon.setId(6);
+            //newPokemon.setId(6);
             newPokemon.setName("Ecrasmouille");
             newPokemon.setWeight(21);
             newPokemon.setFrontRessource(R.drawable.p6);
@@ -348,7 +348,7 @@ public class MainActivity extends AppCompatActivity {
             pokemonDao.insertAll(newPokemon);
 
             newPokemon = new Pokemon();
-            newPokemon.setId(7);
+            //newPokemon.setId(7);
             newPokemon.setName("Alouette");
             newPokemon.setWeight(1);
             newPokemon.setFrontRessource(R.drawable.p7);
@@ -358,7 +358,7 @@ public class MainActivity extends AppCompatActivity {
             pokemonDao.insertAll(newPokemon);
 
             newPokemon = new Pokemon();
-            newPokemon.setId(8);
+            //newPokemon.setId(8);
             newPokemon.setName("Patpatrouille");
             newPokemon.setWeight(54);
             newPokemon.setFrontRessource(R.drawable.p8);
@@ -368,7 +368,7 @@ public class MainActivity extends AppCompatActivity {
             pokemonDao.insertAll(newPokemon);
 
             newPokemon = new Pokemon();
-            newPokemon.setId(9);
+            //newPokemon.setId(9);
             newPokemon.setName("Loucoumouille");
             newPokemon.setWeight(21);
             newPokemon.setFrontRessource(R.drawable.p9);
@@ -378,7 +378,7 @@ public class MainActivity extends AppCompatActivity {
             pokemonDao.insertAll(newPokemon);
 
             newPokemon = new Pokemon();
-            newPokemon.setId(10);
+            //newPokemon.setId(10);
             newPokemon.setName("Chatouillou");
             newPokemon.setWeight(1);
             newPokemon.setFrontRessource(R.drawable.p10);
@@ -518,7 +518,7 @@ public class MainActivity extends AppCompatActivity {
             player.setGender(1);
             player.setExperience(0);
             player.setMoney(1000);
-            player.setName("Euqi");
+            player.setName("Player Test");
             player.setLat(45.764043);
             player.setLat(4.835659);
 
