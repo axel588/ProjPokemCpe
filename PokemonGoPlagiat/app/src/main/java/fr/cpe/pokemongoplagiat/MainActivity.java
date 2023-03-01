@@ -280,6 +280,7 @@ public class MainActivity extends AppCompatActivity {
             newPokemona.setName("Mirai");
             newPokemona.setWeight(8);
             newPokemona.setFrontRessource(R.drawable.p30);
+            newPokemona.setType2(POKEMON_TYPE.None.ordinal());
             newPokemona.setType1(POKEMON_TYPE.Electrique.ordinal());
             newPokemona.setIs_legendary(false);
             pokemonDao.insertAll(newPokemona);
@@ -290,6 +291,7 @@ public class MainActivity extends AppCompatActivity {
             newPokemon.setName("Pikachu");
             newPokemon.setWeight(8);
             newPokemon.setFrontRessource(R.drawable.p1);
+            newPokemon.setType2(POKEMON_TYPE.None.ordinal());
             newPokemon.setType1(POKEMON_TYPE.Electrique.ordinal());
             newPokemon.setIs_legendary(false);
             pokemonDao.insertAll(newPokemon);
@@ -300,6 +302,7 @@ public class MainActivity extends AppCompatActivity {
             newPokemon.setName("Pokemouille");
             newPokemon.setWeight(2);
             newPokemon.setFrontRessource(R.drawable.p2);
+            newPokemon.setType2(POKEMON_TYPE.None.ordinal());
             newPokemon.setType1(POKEMON_TYPE.Acier.ordinal());
             newPokemon.setIs_legendary(false);
             pokemonDao.insertAll(newPokemon);
@@ -309,6 +312,7 @@ public class MainActivity extends AppCompatActivity {
             newPokemon.setName("Ratatouille");
             newPokemon.setWeight(80);
             newPokemon.setFrontRessource(R.drawable.p3);
+            newPokemon.setType2(POKEMON_TYPE.None.ordinal());
             newPokemon.setType1(POKEMON_TYPE.Combat.ordinal());
             newPokemon.setIs_legendary(false);
             pokemonDao.insertAll(newPokemon);
@@ -318,6 +322,7 @@ public class MainActivity extends AppCompatActivity {
             newPokemon.setName("Zoro");
             newPokemon.setWeight(5);
             newPokemon.setFrontRessource(R.drawable.p4);
+            newPokemon.setType2(POKEMON_TYPE.None.ordinal());
             newPokemon.setType1(POKEMON_TYPE.Eau.ordinal());
             newPokemon.setIs_legendary(false);
             pokemonDao.insertAll(newPokemon);
@@ -328,6 +333,7 @@ public class MainActivity extends AppCompatActivity {
             newPokemon.setWeight(58);
             newPokemon.setFrontRessource(R.drawable.p5);
             newPokemon.setType1(POKEMON_TYPE.Glace.ordinal());
+            newPokemon.setType2(POKEMON_TYPE.None.ordinal());
             newPokemon.setIs_legendary(false);
             pokemonDao.insertAll(newPokemon);
 
@@ -497,8 +503,8 @@ public class MainActivity extends AppCompatActivity {
                 // Generate random lat and lng values for Lyon
                 double lyonLat = 45.764043;
                 double lyonLng = 4.835659;
-                double latOffset = rand.nextDouble() / 100; // generate random offset up to 0.1 degrees
-                double lngOffset = rand.nextDouble() / 100; // generate random offset up to 0.1 degrees
+                double latOffset = rand.nextDouble() / 10; // generate random offset up to 0.1 degrees
+                double lngOffset = rand.nextDouble() / 10; // generate random offset up to 0.1 degrees
 
                 // Set the lat and lng values for the healStation object
                 healStation.setLat(lyonLat + latOffset);
@@ -607,8 +613,8 @@ public class MainActivity extends AppCompatActivity {
                 // Generate random lat and lng values for Lyon
                 double lyonLat = 45.764043;
                 double lyonLng = 4.835659;
-                double latOffset = rand.nextDouble() / 110; // generate random offset up to 0.1 degrees
-                double lngOffset = rand.nextDouble() / 110; // generate random offset up to 0.1 degrees
+                double latOffset = rand.nextDouble() / 10; // generate random offset up to 0.1 degrees
+                double lngOffset = rand.nextDouble() / 10; // generate random offset up to 0.1 degrees
 
                 // Set the lat and lng values for the healStation object
                 wildPokemon.setLat(lyonLat + latOffset);

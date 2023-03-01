@@ -22,19 +22,35 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.room.Room;
 
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
 
+import fr.cpe.pokemongoplagiat.bdddao.HealStationDao;
+import fr.cpe.pokemongoplagiat.bdddao.PokemonDao;
+import fr.cpe.pokemongoplagiat.bdddao.relation.WildPokemonPokemon;
+import fr.cpe.pokemongoplagiat.bdddao.relationdao.WildPokemonPokemonDao;
+import fr.cpe.pokemongoplagiat.bddmodels.HealStation;
+import fr.cpe.pokemongoplagiat.bddmodels.Pokemon;
+import fr.cpe.pokemongoplagiat.bddmodels.WildPokemon;
 import fr.cpe.pokemongoplagiat.databinding.PokemonMapBinding;
+import fr.cpe.pokemongoplagiat.models.POKEMON_TYPE;
 
 public class PokemonMapFragment extends Fragment {
 
@@ -188,6 +204,7 @@ public class PokemonMapFragment extends Fragment {
             toast.show();
         }*/
 
+
         locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -199,6 +216,61 @@ public class PokemonMapFragment extends Fragment {
             this.locationListener = new LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
+
+                    List<HealStation> healStations =new ArrayList<>();
+                    List<WildPokemonPokemon> pokemonList =new ArrayList<>();
+                    ExecutorService executor = Executors.newSingleThreadExecutor();
+                    ExecutorService executorn = Executors.newSingleThreadExecutor();
+                    FutureTask<List<HealStation>> futureTask = new FutureTask<>(new Callable<List<HealStation>>() {
+                        @Override
+                        public List<HealStation> call() throws Exception {
+                            AppDatabase db = Room.databaseBuilder(binding.getRoot().getContext(),
+                                    AppDatabase.class, "poke-plagiat").build();
+                            HealStationDao pokemonDao = db.healStationDao();
+                            List<HealStation> allpokemon = pokemonDao.getAll();
+
+                            return allpokemon;
+                        }
+                    });
+
+                    executor.execute(futureTask);
+
+                    try {
+                        healStations = futureTask.get();
+                    } catch (InterruptedException | ExecutionException e) {
+                        // Handle any exceptions that occurred while executing the task
+                    }
+
+// Don't forget to shutdown the executor when it's no longer needed
+                    executor.shutdown();
+
+
+                    FutureTask<List<WildPokemonPokemon>> futureTask_pokemon = new FutureTask<>(new Callable<List<WildPokemonPokemon>>() {
+                        @Override
+                        public List<WildPokemonPokemon> call() throws Exception {
+                            AppDatabase db = Room.databaseBuilder(binding.getRoot().getContext(),
+                                    AppDatabase.class, "poke-plagiat").build();
+                            WildPokemonPokemonDao pokemonDao = db.wildPokemonPokemonDao();
+                            List<WildPokemonPokemon> WildPokemonPokemon = pokemonDao.getAllWildPokemonPokemon();
+
+                            return WildPokemonPokemon;
+                        }
+                    });
+
+                    executorn.execute(futureTask_pokemon);
+
+                    try {
+                        pokemonList = futureTask_pokemon.get();
+                    } catch (InterruptedException | ExecutionException e) {
+                        // Handle any exceptions that occurred while executing the task
+                        int c = 0;
+                    }
+
+// Don't forget to shutdown the executor when it's no longer needed
+                    executorn.shutdown();
+
+
+
                     double latitude = location.getLatitude();
                     double longitude = location.getLongitude();
                     binding.mapView.getController().setCenter(new GeoPoint(latitude, longitude));
@@ -215,13 +287,17 @@ public class PokemonMapFragment extends Fragment {
                     binding.mapView.getOverlays().add(pokemonMarker);
 
                     //On vérifie les marqueurs dans un rayon de 1km
-                    for (GeoPoint point : points) {
+                    for (WildPokemonPokemon pokemon : pokemonList) {
+                        GeoPoint point = new GeoPoint(
+                                pokemon.getWildPokemon().getLat(),
+                                pokemon.getWildPokemon().getLng()
+                                );
                         if (point.distanceToAsDouble(new GeoPoint(latitude, longitude)) <= 1000) {
                             Marker marker = new Marker(binding.mapView);
-
-                            int pokemonId = 1 + new Random().nextInt(50 - 1 + 1);
-                            String iconName = "p" + pokemonId;
-                            int iconResourceId = getResources().getIdentifier(iconName, "drawable", getContext().getPackageName());
+                            //marker.setTitle(pokemon.getPokemon().getName());
+                            int pokemonId = pokemon.getPokemon().getFrontRessourceInt();
+                            //String iconName = "p" + pokemonId;
+                            int iconResourceId = pokemonId;//getResources().getIdentifier(iconName, "drawable", getContext().getPackageName());
                             Drawable pokeIcon = ContextCompat.getDrawable(getContext(), iconResourceId);
 
                             marker.setPosition(point);
@@ -230,7 +306,23 @@ public class PokemonMapFragment extends Fragment {
                             binding.mapView.getOverlays().add(marker);
                         }
                     }
-
+                    for (HealStation station : healStations) {
+                        GeoPoint point = new GeoPoint(station.getLat(),station.getLng());
+                        if (point.distanceToAsDouble(new GeoPoint(latitude, longitude)) <= 1000) {
+                            Marker marker = new Marker(binding.mapView);
+                            String iconName = "heal_station";
+                            int iconResourceId = getResources().getIdentifier(iconName, "drawable", getContext().getPackageName());
+                            Drawable pokeIcon = ContextCompat.getDrawable(getContext(), iconResourceId);
+                            //marker.setTitle("Heal station");
+                            // Set the marker's info window with the label text
+                            //marker.setInfoWindow(new MarkerInfoWindow(R.layout.marker_title_display, mapView));
+                            marker.setPosition(point);
+                            // assuming you have a Pokemon icon in your drawable folder
+                            marker.setIcon(pokeIcon);
+                            binding.mapView.getOverlays().add(marker);
+                        }
+                    }
+                    //healStations
 
                     binding.mapView.getController().setCenter(new GeoPoint(latitude, longitude));
                     binding.mapView.getController().setZoom(18.0);
