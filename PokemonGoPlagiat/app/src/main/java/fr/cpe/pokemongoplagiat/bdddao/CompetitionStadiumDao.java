@@ -25,4 +25,7 @@ public interface CompetitionStadiumDao {
 
     @Delete
     void delete(CompetitionStadium competitionStadium);
+
+    @Query("DELETE FROM CompetitionStadium")
+    public void deleteAll();
 }

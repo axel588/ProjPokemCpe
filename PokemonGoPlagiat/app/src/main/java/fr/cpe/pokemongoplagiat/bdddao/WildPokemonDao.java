@@ -25,4 +25,7 @@ public interface WildPokemonDao {
 
     @Delete
     void delete(WildPokemon wildPokemon);
+
+    @Query("DELETE FROM WildPokemon")
+    public void deleteAll();
 }

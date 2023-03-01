@@ -23,4 +23,7 @@ public interface InventoryDao {
 
     @Delete
     void delete(Inventory inventory);
+
+    @Query("DELETE FROM Inventory")
+    public void deleteAll();
 }

@@ -23,4 +23,7 @@ public interface OwnedItemDao {
 
     @Delete
     void delete(OwnedItem ownedItem);
+
+    @Query("DELETE FROM OwnedItem")
+    public void deleteAll();
 }

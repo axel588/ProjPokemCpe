@@ -25,4 +25,8 @@ public interface PlayerDao {
 
     @Delete
     void delete(Player player);
+
+    @Query("DELETE FROM Player")
+    public void deleteAll();
+
 }

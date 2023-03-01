@@ -25,4 +25,7 @@ public interface ItemDao {
 
     @Delete
     void delete(Item item);
+
+    @Query("DELETE FROM Item")
+    public void deleteAll();
 }

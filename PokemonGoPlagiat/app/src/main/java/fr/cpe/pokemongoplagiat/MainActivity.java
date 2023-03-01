@@ -256,12 +256,35 @@ public class MainActivity extends AppCompatActivity {
     {
         AppDatabase db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "poke-plagiat").build();
-
+        db.wildPokemonDao().deleteAll();
+        db.competitionStadiumDao().deleteAll();
+        db.ownedItemDao().deleteAll();
+        db.itemDao().deleteAll();
+        db.inventoryDao().deleteAll();
+        db.attackDao().deleteAll();
+        db.ownedPokemonDao().deleteAll();
+        db.pokemonTeamDao().deleteAll();
+        db.discoveredPokemonDao().deleteAll();
+        db.pokedexDao().deleteAll();
+        db.pokemonDao().deleteAll();
+        db.playerDao().deleteAll();
+        db.healStationDao().deleteAll();
 
         PokemonDao pokemonDao = db.pokemonDao();
         List<Pokemon> listPoke = pokemonDao.getAll();
         if (listPoke.size() <= 0)
         {
+
+            Pokemon newPokemona = new Pokemon();
+            newPokemona.setId(0);
+            newPokemona.setName("Mirai");
+            newPokemona.setWeight(8);
+            newPokemona.setFrontRessource(R.drawable.p30);
+            newPokemona.setType1(POKEMON_TYPE.Electrique.ordinal());
+            newPokemona.setIs_legendary(false);
+            pokemonDao.insertAll(newPokemona);
+
+
             Pokemon newPokemon = new Pokemon();
             newPokemon.setId(1);
             newPokemon.setName("Pikachu");
@@ -428,11 +451,13 @@ public class MainActivity extends AppCompatActivity {
 
 
             AttackDao attaqueDao = db.attackDao();
-
+            List<Attack> attacs = attaqueDao.getAll();
+            List<Pokemon> pokess = pokemonDao.getAll();
             for (int i = 0; i < 20; i++) {
+                attacs = attaqueDao.getAll();
                 Attack attack = new Attack();
-                attack.setId(1);
-                attack.setId_pokemon((int)(((Math.cos(i)+1.0)/2.0)*10));
+                //attack.setId(i);
+                attack.setId_pokemon(pokess.get((int)(((Math.cos(i)+1.0)/2.0)*(pokess.size()-1))).getId());
                 attack.setTitle(electricalAttacks.get(i));
                 attack.setDescription("Attaque électrique disjonctée");
                 attack.setType(POKEMON_TYPE.Electrique.ordinal());
@@ -442,8 +467,8 @@ public class MainActivity extends AppCompatActivity {
 
             for (int i = 0; i < 20; i++) {
                 Attack attack = new Attack();
-                attack.setId(1);
-                attack.setId_pokemon((int)(((Math.cos(i+0.44)+1.0)/2.0)*10));
+                //attack.setId(21+i);
+                attack.setId_pokemon(pokess.get((int)(((Math.cos(i+0.44)+1.0)/2.0)*(pokess.size()-1))).getId());
                 attack.setTitle(fireAttacks.get(i));
                 attack.setDescription("Attaque de feu enflammée");
                 attack.setType(POKEMON_TYPE.Feu.ordinal());
@@ -453,9 +478,9 @@ public class MainActivity extends AppCompatActivity {
 
             for (int i = 0; i < 20; i++) {
                 Attack attack = new Attack();
-                attack.setId(1);
+                //attack.setId(41+ i);
                 attack.setTitle(steelAttacks.get(i));
-                attack.setId_pokemon((int)(((Math.cos(i+1.94)+1.0)/2.0)*10));
+                attack.setId_pokemon(pokess.get((int)(((Math.sin(i+0.84)+1.0)/2.0)*(pokess.size()-1))).getId());
                 attack.setDescription("Attaque de fer puissante");
                 attack.setType(POKEMON_TYPE.Acier.ordinal());
                 attack.setDamage(10+i*5);
@@ -467,7 +492,7 @@ public class MainActivity extends AppCompatActivity {
             for(int v = 0;v< 100; v++)
             {
                 HealStation healStation = new HealStation();
-                healStation.setId(v);
+                //healStation.setId(v);
                 healStation.setLevel(v%3);
                 // Generate random lat and lng values for Lyon
                 double lyonLat = 45.764043;
@@ -492,6 +517,7 @@ public class MainActivity extends AppCompatActivity {
             player.setLat(4.835659);
 
             playerDao.insertAll(player);
+            player = playerDao.getAll().get(0);
 
             PokemonTeamDao pokemonTeamDao = db.pokemonTeamDao();
             PokemonTeam pokemonTeam = new PokemonTeam();
@@ -499,18 +525,21 @@ public class MainActivity extends AppCompatActivity {
             pokemonTeam.setLimit(6);
             pokemonTeam.setId_player(player.getId());
             pokemonTeamDao.insertAll(pokemonTeam);
+            pokemonTeam = pokemonTeamDao.getAll().get(0);
 
             PokedexDao pokedexDao = db.pokedexDao();
             Pokedex pokedex = new Pokedex();
             pokedex.setId(1);
             pokedex.setId_player(player.getId());
             pokedexDao.insertAll(pokedex);
+            pokedex = pokedexDao.getAll().get(0);
 
             InventoryDao inventoryDao = db.inventoryDao();
             Inventory inventory = new Inventory();
             inventory.setId(1);
             inventory.setId_player(player.getId());
             inventoryDao.insertAll(inventory);
+            inventory = inventoryDao.getAll().get(0);
 
             ArrayList<String> pokemonItems = new ArrayList<String>();
             pokemonItems.add("Poke Ball");
@@ -537,19 +566,21 @@ public class MainActivity extends AppCompatActivity {
             for(int c = 0;c<10;c++)
             {
                 Item item = new Item();
-                item.setId(c);
+                //item.setId(c);
                 item.setName(pokemonItems.get(c));
                 item.setType(c%2);
 
                 itemDao.insertAll(item);
             }
+            List<Item> all_items=  itemDao.getAll();
+
             OwnedItemDao ownedItemDao = db.ownedItemDao();
             for(int v = 0; v<3; v++ )
             {
                 OwnedItem ownedItem = new OwnedItem();
-                ownedItem.setId(v);
-                ownedItem.setId_item(v);
-                ownedItem.setId_inventory(1);
+                //ownedItem.setId(v);
+                ownedItem.setId_item(all_items.get(v).getId());
+                ownedItem.setId_inventory(inventory.getId());
                 ownedItem.setAmount(100);
             }
             long millis = System.currentTimeMillis();
@@ -557,15 +588,18 @@ public class MainActivity extends AppCompatActivity {
             DiscoveredPokemonDao discoveredPokemonDao = db.discoveredPokemonDao();
             DiscoveredPokemon discoveredPokemon = new DiscoveredPokemon();
             discoveredPokemon.setDate(date);
-            discoveredPokemon.setId_pokedex(1);
-            discoveredPokemon.setId_pokemon(1);
-            discoveredPokemon.setId(1);
+            discoveredPokemon.setId_pokedex(pokedex.getId());
+            discoveredPokemon.setId_pokemon(pokess.get(0).getId());
+            discoveredPokemonDao.insertAll(discoveredPokemon);
+            discoveredPokemon = discoveredPokemonDao.getAll().get(0);
+            //discoveredPokemon.setId(1);
 
             WildPokemonDao wildPokemonDao = db.wildPokemonDao();
             for(int v = 0;v< 100; v++)
             {
                 WildPokemon wildPokemon = new WildPokemon();
-                wildPokemon.setId(v);
+                //wildPokemon.setId(v);
+                wildPokemon.setId_pokemon(pokess.get(v%10).getId());
                 wildPokemon.setLevel(v%3);
                 wildPokemon.setPv(v%3*20);
                 wildPokemon.setLevel(2+v%3);
@@ -584,12 +618,12 @@ public class MainActivity extends AppCompatActivity {
 
             OwnedPokemonDao ownedPokemonDao = db.ownedPokemonDao();
             OwnedPokemon ownedPokemon = new OwnedPokemon();
-            ownedPokemon.setId(1);
+            //ownedPokemon.setId(1);
             ownedPokemon.setLevel(12);
             ownedPokemon.setPv(100);
             ownedPokemon.setState(0);
-            ownedPokemon.setId_pokemon_team(1);
-            ownedPokemon.setId_pokemon(2);
+            ownedPokemon.setId_pokemon_team(pokemonTeam.getId());
+            ownedPokemon.setId_pokemon(pokess.get(2).getId());
             ownedPokemonDao.insertAll(ownedPokemon);
 
 
