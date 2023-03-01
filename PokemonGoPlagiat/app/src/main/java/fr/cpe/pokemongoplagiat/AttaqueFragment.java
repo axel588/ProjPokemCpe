@@ -108,10 +108,27 @@ public class AttaqueFragment extends Fragment {
             @Override
             public void onClickOnAttaquerPokemon(int i)
             {
-                long dammage = viewModel.getDamageMyPokemon(i);
-                viewModel.subPvWildPokemon(dammage);
+                if (viewModel.getPvOwnedPokemon() > 0) {
+                    long dammage = viewModel.getDamageMyPokemon(i);
+                    viewModel.subPvWildPokemon(dammage);
+                    if (viewModel.getPvPokemonAttaque() > 0) {
+                        Random rand = new Random();
+                        int val = Math.abs(rand.nextInt()) % 6;
+                        dammage = viewModel.getDamageWildPokemon(val);
+                        viewModel.subPvMyPokemon(dammage);
+                        if (viewModel.getPvOwnedPokemon() <= 0) {
+                            binding.buttonAttaquer.setVisibility(View.VISIBLE);
+                            binding.buttonFuir.setVisibility(View.VISIBLE);
+                            binding.buttonInventaire.setVisibility(View.VISIBLE);
+                            binding.buttonEchanger.setVisibility(View.VISIBLE);
+                            binding.buttonAnnuler.setVisibility(View.GONE);
+                        }
 
-                if (viewModel.getPvOwnedPokemon() <= 0)
+                    } else {
+                        binding.buttonGagne.setVisibility(View.VISIBLE);
+                    }
+                }
+                else
                 {
                     binding.buttonAttaquer.setVisibility(View.VISIBLE);
                     binding.buttonFuir.setVisibility(View.VISIBLE);
@@ -119,18 +136,6 @@ public class AttaqueFragment extends Fragment {
                     binding.buttonEchanger.setVisibility(View.VISIBLE);
                     binding.buttonAnnuler.setVisibility(View.GONE);
                 }
-                else {
-
-                    if (viewModel.getPvPokemonAttaque() > 0) {
-                        Random rand = new Random();
-                        int val = Math.abs(rand.nextInt()) % 6;
-                        dammage = viewModel.getDamageWildPokemon(val);
-                        viewModel.subPvMyPokemon(dammage);
-                    } else {
-                        binding.buttonGagne.setVisibility(View.VISIBLE);
-                    }
-                }
-
 
 
             }
