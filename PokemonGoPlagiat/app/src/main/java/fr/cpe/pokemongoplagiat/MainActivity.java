@@ -255,7 +255,9 @@ public class MainActivity extends AppCompatActivity {
     void insertDB()
     {
         AppDatabase db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "poke-plagiat").build();
+                AppDatabase.class, "poke-plagiat")
+                .fallbackToDestructiveMigration()
+                .build();
         db.wildPokemonDao().deleteAll();
         db.competitionStadiumDao().deleteAll();
         db.ownedItemDao().deleteAll();
@@ -459,37 +461,37 @@ public class MainActivity extends AppCompatActivity {
             AttackDao attaqueDao = db.attackDao();
             List<Attack> attacs = attaqueDao.getAll();
             List<Pokemon> pokess = pokemonDao.getAll();
-            for (int i = 0; i < 20; i++) {
+            for (int i = 0; i < 50; i++) {
                 attacs = attaqueDao.getAll();
                 Attack attack = new Attack();
                 //attack.setId(i);
                 attack.setId_pokemon(pokess.get((int)(((Math.cos(i)+1.0)/2.0)*(pokess.size()-1))).getId());
-                attack.setTitle(electricalAttacks.get(i));
+                attack.setTitle(electricalAttacks.get(i%10));
                 attack.setDescription("Attaque électrique disjonctée");
                 attack.setType(POKEMON_TYPE.Electrique.ordinal());
-                attack.setDamage(10+i*5);
+                attack.setDamage(10+i%20*5);
                 attaqueDao.insertAll(attack);
             }
 
-            for (int i = 0; i < 20; i++) {
+            for (int i = 0; i < 50; i++) {
                 Attack attack = new Attack();
                 //attack.setId(21+i);
                 attack.setId_pokemon(pokess.get((int)(((Math.cos(i+0.44)+1.0)/2.0)*(pokess.size()-1))).getId());
-                attack.setTitle(fireAttacks.get(i));
+                attack.setTitle(fireAttacks.get(i%10));
                 attack.setDescription("Attaque de feu enflammée");
                 attack.setType(POKEMON_TYPE.Feu.ordinal());
-                attack.setDamage(10+i*5);
+                attack.setDamage(10+i%20*5);
                 attaqueDao.insertAll(attack);
             }
 
-            for (int i = 0; i < 20; i++) {
+            for (int i = 0; i < 50; i++) {
                 Attack attack = new Attack();
                 //attack.setId(41+ i);
-                attack.setTitle(steelAttacks.get(i));
+                attack.setTitle(steelAttacks.get(i%10));
                 attack.setId_pokemon(pokess.get((int)(((Math.sin(i+0.84)+1.0)/2.0)*(pokess.size()-1))).getId());
                 attack.setDescription("Attaque de fer puissante");
                 attack.setType(POKEMON_TYPE.Acier.ordinal());
-                attack.setDamage(10+i*5);
+                attack.setDamage(10+i%20*5);
                 attaqueDao.insertAll(attack);
             }
 
@@ -606,9 +608,12 @@ public class MainActivity extends AppCompatActivity {
                 WildPokemon wildPokemon = new WildPokemon();
                 //wildPokemon.setId(v);
                 wildPokemon.setId_pokemon(pokess.get(v%10).getId());
-                wildPokemon.setLevel(v%3);
-                wildPokemon.setPv(v%3*20);
+
                 wildPokemon.setLevel(2+v%3);
+                wildPokemon.setPv_per_level(2);
+                wildPokemon.setBase_pv(20);
+                wildPokemon.setPv((int)(wildPokemon.getBase_pv()+wildPokemon.getPv_per_level()*wildPokemon.getLevel()));
+
                 wildPokemon.setState(0);
                 // Generate random lat and lng values for Lyon
                 double lyonLat = 45.764043;
@@ -626,7 +631,8 @@ public class MainActivity extends AppCompatActivity {
             OwnedPokemon ownedPokemon = new OwnedPokemon();
             //ownedPokemon.setId(1);
             ownedPokemon.setLevel(12);
-            ownedPokemon.setPv(100);
+            ownedPokemon.setBase_pv(20);
+            ownedPokemon.setPv(ownedPokemon.getBase_pv()+ownedPokemon.getLevel()* ownedPokemon.getPv_per_level());
             ownedPokemon.setState(0);
             ownedPokemon.setId_pokemon_team(pokemonTeam.getId());
             ownedPokemon.setId_pokemon(pokess.get(2).getId());

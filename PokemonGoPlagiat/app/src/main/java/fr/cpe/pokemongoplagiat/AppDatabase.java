@@ -19,6 +19,7 @@ import fr.cpe.pokemongoplagiat.bdddao.PokemonDao;
 import fr.cpe.pokemongoplagiat.bdddao.PokemonTeamDao;
 import fr.cpe.pokemongoplagiat.bdddao.WildPokemonDao;
 import fr.cpe.pokemongoplagiat.bdddao.relation.WildPokemonPokemon;
+import fr.cpe.pokemongoplagiat.bdddao.relationdao.PlayerPokemonDao;
 import fr.cpe.pokemongoplagiat.bdddao.relationdao.WildPokemonPokemonDao;
 import fr.cpe.pokemongoplagiat.bddmodels.Attack;
 import fr.cpe.pokemongoplagiat.bddmodels.CompetitionStadium;
@@ -48,10 +49,11 @@ import fr.cpe.pokemongoplagiat.bddmodels.WildPokemon;
         Pokemon.class,
         PokemonTeam.class,
         WildPokemon.class
-}, version = 1)
+}, version = 2)
 @TypeConverters({Converters.class})
 public abstract class AppDatabase extends RoomDatabase {
     public abstract PokemonDao pokemonDao();
+    public abstract PlayerPokemonDao playerpokemonDao();
     public abstract ItemDao itemDao();
     public abstract WildPokemonDao wildPokemonDao();
     public abstract PokemonTeamDao pokemonTeamDao();

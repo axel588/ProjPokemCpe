@@ -17,6 +17,25 @@ public class WildPokemon {
     private long pv;
     private long state;
 
+    public int getPv_per_level() {
+        return pv_per_level;
+    }
+
+    public void setPv_per_level(int pv_per_level) {
+        this.pv_per_level = pv_per_level;
+    }
+
+    public int getBase_pv() {
+        return base_pv;
+    }
+
+    public void setBase_pv(int base_pv) {
+        this.base_pv = base_pv;
+    }
+
+    private int pv_per_level = 2;
+    private int base_pv = 20;
+
     public long getId() {
         return id;
     }
@@ -61,8 +80,10 @@ public class WildPokemon {
         return pv;
     }
 
+
     public void setPv(long pv) {
         this.pv = pv;
+
     }
 
     public long getState() {

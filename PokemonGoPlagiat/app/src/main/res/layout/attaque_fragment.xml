@@ -58,7 +58,7 @@
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:progress="50"
+            android:progress="@{attaqueViewModel.pvPokemonAttaque}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/pokemonAttaque_name" />
 
@@ -81,7 +81,7 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:progress="50"
+            android:progress="@{attaqueViewModel.pvOwnedPokemon}"
             app:layout_constraintBottom_toTopOf="@id/separator"
             app:layout_constraintStart_toStartOf="parent"
             android:gravity="center"/>
@@ -104,7 +104,8 @@
             android:id="@+id/button_Attaque1"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:text="Attaque 1"
+            android:text="@{attaqueViewModel.getNameAttackOwnedPokemon(0)}"
+            android:onClick="@{()->attaqueViewModel.runOnClickOnAttaquerPokemonListener(0)}"
             app:layout_constraintTop_toBottomOf="@id/separator"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/button_Attaque2"
@@ -119,7 +120,8 @@
             android:id="@+id/button_Attaque2"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:text="Attaque 2"
+            android:text="@{attaqueViewModel.getNameAttackOwnedPokemon(1)}"
+            android:onClick="@{() -> attaqueViewModel.runOnClickOnAttaquerPokemonListener(1)}"
             app:layout_constraintTop_toBottomOf="@id/separator"
             app:layout_constraintStart_toEndOf="@id/button_Attaque1"
             app:layout_constraintEnd_toStartOf="@id/button_Attaque3"
@@ -133,7 +135,8 @@
             android:id="@+id/button_Attaque3"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:text="Attaque 3"
+            android:text="@{attaqueViewModel.getNameAttackOwnedPokemon(2)}"
+            android:onClick="@{() -> attaqueViewModel.runOnClickOnAttaquerPokemonListener(2)}"
             app:layout_constraintTop_toBottomOf="@id/separator"
             app:layout_constraintStart_toEndOf="@id/button_Attaque2"
             app:layout_constraintEnd_toEndOf="parent"
@@ -148,7 +151,8 @@
             android:id="@+id/button_Attaque4"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:text="Attaque 4"
+            android:text="@{attaqueViewModel.getNameAttackOwnedPokemon(3)}"
+            android:onClick="@{() -> attaqueViewModel.runOnClickOnAttaquerPokemonListener(3)}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/button_Attaque5"
@@ -165,7 +169,8 @@
             android:id="@+id/button_Attaque5"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:text="Attaque 5"
+            android:text="@{attaqueViewModel.getNameAttackOwnedPokemon(4)}"
+            android:onClick="@{() -> attaqueViewModel.runOnClickOnAttaquerPokemonListener(4)}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/button_Attaque4"
             app:layout_constraintEnd_toStartOf="@id/button_Attaque6"
@@ -182,7 +187,8 @@
             android:id="@+id/button_Attaque6"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:text="Attaque 6"
+            android:text="@{attaqueViewModel.getNameAttackOwnedPokemon(5)}"
+            android:onClick="@{() -> attaqueViewModel.runOnClickOnAttaquerPokemonListener(5)}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@id/button_Attaque5"
             app:layout_constraintEnd_toEndOf="parent"
@@ -270,6 +276,23 @@
             android:onClick="@{() -> attaqueViewModel.RunArgent()}"
 
 
+            />
+
+
+
+        <Button
+            android:id="@+id/button_gagne"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="Vous avez gangé !"
+            android:onClick="@{() ->attaqueViewModel.runOnClickOnFuireListener()}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:background="#EE555555"
+            android:textColor="#FFFFFF"
+            android:layout_margin="8dp"
             />
 
 
