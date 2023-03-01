@@ -18,7 +18,8 @@ public enum POKEMON_TYPE {
     Sol(14),
     Spectre(15),
     Tenebre(16),
-    Vol(17);
+    Vol(17),
+    None(18);
 
     private int val;
 

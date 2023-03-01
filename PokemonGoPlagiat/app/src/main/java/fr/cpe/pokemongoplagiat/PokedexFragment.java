@@ -185,10 +185,16 @@ public class PokedexFragment extends Fragment {
                     poke.setType1_(POKEMON_TYPE.valueOf((int)poke.getType1()));
                     int idtype1 = getResources().getIdentifier(POKEMON_TYPE.valueOf((int)poke.getType1()).name().toLowerCase(), "drawable",
                         binding.getRoot().getContext().getPackageName());
-                    int idtype2 = getResources().getIdentifier(POKEMON_TYPE.valueOf((int)poke.getType2()).name().toLowerCase(), "drawable",
-                            binding.getRoot().getContext().getPackageName());
+                    int idtype2 = 0;
+
                     poke.setType1_img(idtype1);
-                    poke.setType2_img(idtype2);
+                    if(poke.getType2_() != POKEMON_TYPE.None)
+                    {
+                        idtype2 = getResources().getIdentifier(POKEMON_TYPE.valueOf((int)poke.getType2()).name().toLowerCase(), "drawable",
+                                binding.getRoot().getContext().getPackageName());
+                        poke.setType2_img(idtype2);
+                    }
+
                     allpokemon.set(m, poke);
 
                 }
