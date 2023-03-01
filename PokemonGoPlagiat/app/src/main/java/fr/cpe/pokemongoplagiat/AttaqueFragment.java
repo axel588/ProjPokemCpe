@@ -9,11 +9,32 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.room.Room;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
+
+import fr.cpe.pokemongoplagiat.bdddao.AttackDao;
+import fr.cpe.pokemongoplagiat.bdddao.PlayerDao;
+import fr.cpe.pokemongoplagiat.bdddao.PokemonDao;
+import fr.cpe.pokemongoplagiat.bdddao.relation.OwnedPokemonPokemon;
+import fr.cpe.pokemongoplagiat.bdddao.relation.WildPokemonPokemon;
+import fr.cpe.pokemongoplagiat.bdddao.relationdao.PlayerPokemonDao;
+import fr.cpe.pokemongoplagiat.bdddao.relationdao.WildPokemonPokemonDao;
+import fr.cpe.pokemongoplagiat.bddmodels.Attack;
+import fr.cpe.pokemongoplagiat.bddmodels.OwnedPokemon;
+import fr.cpe.pokemongoplagiat.bddmodels.Player;
 import fr.cpe.pokemongoplagiat.bddmodels.Pokemon;
 import fr.cpe.pokemongoplagiat.databinding.AttaqueFragmentBinding;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnAnnulerListener;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnAttaqueListener;
+import fr.cpe.pokemongoplagiat.interfaces.OnClickOnAttaquerPokemonListener;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnFuireListener;
 import fr.cpe.pokemongoplagiat.models.POKEMON_TYPE;
 
@@ -22,36 +43,35 @@ public class AttaqueFragment extends Fragment {
 
     AttaqueViewModel viewModel = new AttaqueViewModel();
 
+    public AttaqueFragmentBinding binding;
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        AttaqueFragmentBinding binding = DataBindingUtil.inflate(inflater,
+        binding = DataBindingUtil.inflate(inflater,
                 R.layout.attaque_fragment,container,false);
 
+        binding.buttonGagne.setVisibility(View.GONE);
 
-        Pokemon monPokemon = new Pokemon();
-        Pokemon pokemonAttaque = new Pokemon();
-
-        monPokemon.setName("bulbizar");
-        monPokemon.setFrontRessource((long)getResources().getIdentifier("p1","drawable",
-                binding.getRoot().getContext().getPackageName()));
-        monPokemon.setType1_(POKEMON_TYPE.Acier);
-        monPokemon.setType2_(POKEMON_TYPE.Feu);
-        monPokemon.setType1Img(R.drawable.acier);
-        monPokemon.setType2Img(R.drawable.feu);
-
-        pokemonAttaque.setName("totogro");
-        pokemonAttaque.setFrontRessource((long)getResources().getIdentifier("p10","drawable",
-                binding.getRoot().getContext().getPackageName()));
-        pokemonAttaque.setType1_(POKEMON_TYPE.Glace);
-        pokemonAttaque.setType1Img(R.drawable.glace);
+        List<OwnedPokemonPokemon> ownedPokemon = new ArrayList<>();
+        WildPokemonPokemon pokemonAttaque = getWildPokemon();
 
 
 
+        Long idPlayer = getIdPlayer();
+        ownedPokemon = getMyPokemon(idPlayer);
         viewModel.setPokemennAttaque(pokemonAttaque);
-        viewModel.setMyPokemon(monPokemon);
+        viewModel.setAttackPokemonWild(getAttackByPokemon(pokemonAttaque.getPokemon().getId()));
+        if(ownedPokemon.size()>0)
+        {
+            viewModel.setMyPokemon(ownedPokemon.get(0));
+
+
+            viewModel.setAttackOwnedPokemon(getAttackByPokemon(ownedPokemon.get(0).getPokemon().getId()));
+        }
+
         //viewModel.setPokemon(pokemon);
 
 
@@ -82,8 +102,43 @@ public class AttaqueFragment extends Fragment {
             }
         };
 
+
+        OnClickOnAttaquerPokemonListener attaquerPokemonListnerAgent = new OnClickOnAttaquerPokemonListener ()
+        {
+            @Override
+            public void onClickOnAttaquerPokemon(int i)
+            {
+                long dammage = viewModel.getDamageMyPokemon(i);
+                viewModel.subPvWildPokemon(dammage);
+
+                if (viewModel.getPvOwnedPokemon() <= 0)
+                {
+                    binding.buttonAttaquer.setVisibility(View.VISIBLE);
+                    binding.buttonFuir.setVisibility(View.VISIBLE);
+                    binding.buttonInventaire.setVisibility(View.VISIBLE);
+                    binding.buttonEchanger.setVisibility(View.VISIBLE);
+                    binding.buttonAnnuler.setVisibility(View.GONE);
+                }
+                else {
+
+                    if (viewModel.getPvPokemonAttaque() > 0) {
+                        Random rand = new Random();
+                        int val = Math.abs(rand.nextInt()) % 6;
+                        dammage = viewModel.getDamageWildPokemon(val);
+                        viewModel.subPvMyPokemon(dammage);
+                    } else {
+                        binding.buttonGagne.setVisibility(View.VISIBLE);
+                    }
+                }
+
+
+
+            }
+        };
+
         viewModel.setOnClickOnAnnulerListener(annulerListnerAgent);
         viewModel.setOnClickOnAttaqueListener(argent);
+        viewModel.setOnClickOnAttaquerPokemonListener(attaquerPokemonListnerAgent);
         binding.setAttaqueViewModel(viewModel);
             /*@Override
             public boolean OnClickOnAttaqueListener(@NonNull MenuItem item) {
@@ -97,5 +152,126 @@ public class AttaqueFragment extends Fragment {
     {
         viewModel.setOnClickOnFuireListener(listener);
     }
+
+    public List<OwnedPokemonPokemon> getMyPokemon(Long idPlayer)
+    {
+        List<OwnedPokemonPokemon> ownedPokemon = new ArrayList<>();
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        FutureTask<List<OwnedPokemonPokemon>> futureTask = new FutureTask<>(new Callable<List<OwnedPokemonPokemon>>() {
+            @Override
+            public List<OwnedPokemonPokemon> call() throws Exception {
+                AppDatabase db = Room.databaseBuilder(binding.getRoot().getContext(),
+                        AppDatabase.class, "poke-plagiat").build();
+
+                PlayerPokemonDao playerPokemonDao = db.playerpokemonDao();
+                List<OwnedPokemonPokemon> monPoke = playerPokemonDao.getOwnedPokemonsByPlayerId(idPlayer);
+                return monPoke;
+            }
+        });
+
+        executor.execute(futureTask);
+
+        try {
+            ownedPokemon = futureTask.get();
+        } catch (InterruptedException | ExecutionException e) {
+            // Handle any exceptions that occurred while executing the task
+        }
+
+// Don't forget to shutdown the executor when it's no longer needed
+        executor.shutdown();
+
+        return ownedPokemon;
+    }
+
+    public WildPokemonPokemon getWildPokemon()
+    {
+        WildPokemonPokemon wildPokemonPokemon = new  WildPokemonPokemon();
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        FutureTask<WildPokemonPokemon> futureTask = new FutureTask<>(new Callable<WildPokemonPokemon>() {
+            @Override
+            public  WildPokemonPokemon call() throws Exception {
+                AppDatabase db = Room.databaseBuilder(binding.getRoot().getContext(),
+                        AppDatabase.class, "poke-plagiat").build();
+
+                WildPokemonPokemonDao wildPokemonPokemonDao = db.wildPokemonPokemonDao();
+                List<WildPokemonPokemon> pokes = wildPokemonPokemonDao.getAllWildPokemonPokemon();
+                return pokes.get(0);
+            }
+        });
+
+        executor.execute(futureTask);
+
+        try {
+            wildPokemonPokemon = futureTask.get();
+        } catch (InterruptedException | ExecutionException e) {
+            // Handle any exceptions that occurred while executing the task
+        }
+
+// Don't forget to shutdown the executor when it's no longer needed
+        executor.shutdown();
+
+        return wildPokemonPokemon;
+    }
+
+    public Long getIdPlayer()
+    {
+        Long idPlayer = new Long(0);
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        FutureTask<Long> futureTask = new FutureTask<>(new Callable<Long>() {
+            @Override
+            public Long call() throws Exception {
+                AppDatabase db = Room.databaseBuilder(binding.getRoot().getContext(),
+                        AppDatabase.class, "poke-plagiat").build();
+
+                PlayerDao playerDao = db.playerDao();
+                List<Player> player = playerDao.getAll();
+                return player.get(0).getId();
+            }
+        });
+
+        executor.execute(futureTask);
+
+        try {
+            idPlayer = futureTask.get();
+        } catch (InterruptedException | ExecutionException e) {
+            // Handle any exceptions that occurred while executing the task
+        }
+
+// Don't forget to shutdown the executor when it's no longer needed
+        executor.shutdown();
+
+        return idPlayer;
+    }
+
+    public List<Attack> getAttackByPokemon(long idPokemon)
+    {
+        List<Attack> attackPokemon = new ArrayList<>();
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        FutureTask<List<Attack>> futureTask = new FutureTask<>(new Callable<List<Attack>>() {
+            @Override
+            public List<Attack> call() throws Exception {
+                AppDatabase db = Room.databaseBuilder(binding.getRoot().getContext(),
+                        AppDatabase.class, "poke-plagiat").build();
+
+                AttackDao attackDao = db.attackDao();
+                List<Attack> attackPokemon = attackDao.getAllByPokemon(idPokemon);
+                return attackPokemon ;
+            }
+        });
+
+        executor.execute(futureTask);
+
+        try {
+            attackPokemon = futureTask.get();
+        } catch (InterruptedException | ExecutionException e) {
+            // Handle any exceptions that occurred while executing the task
+        }
+
+// Don't forget to shutdown the executor when it's no longer needed
+        executor.shutdown();
+
+        return attackPokemon;
+    }
+
 
 }

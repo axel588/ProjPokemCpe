@@ -43,7 +43,7 @@ public class PokemonDetailsViewModel extends BaseObservable {
     }
 
     public Drawable getType2Img(Context context, int res) {
-        if(res != -1)
+        if(res != -1&& res != 0)
             return ResourcesCompat.getDrawable(context.getResources(),
                     res, context.getTheme());
         else
@@ -51,7 +51,7 @@ public class PokemonDetailsViewModel extends BaseObservable {
     }
 
     public Drawable getType1Img(Context context, int res) {
-        if(res != -1)
+        if(res != -1&& res != 0)
             return ResourcesCompat.getDrawable(context.getResources(),
                     res, context.getTheme());
         else

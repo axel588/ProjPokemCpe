@@ -61,6 +61,25 @@ public class OwnedPokemon {
         this.id_pokemon_team = id_pokemon_team;
     }
 
+    private int pv_per_level;
+    private int base_pv;
+
+    public int getPv_per_level() {
+        return pv_per_level;
+    }
+
+    public void setPv_per_level(int pv_per_level) {
+        this.pv_per_level = pv_per_level;
+    }
+
+    public int getBase_pv() {
+        return base_pv;
+    }
+
+    public void setBase_pv(int base_pv) {
+        this.base_pv = base_pv;
+    }
+
     @PrimaryKey(autoGenerate = true)
     private long id;
     private long id_pokemon;

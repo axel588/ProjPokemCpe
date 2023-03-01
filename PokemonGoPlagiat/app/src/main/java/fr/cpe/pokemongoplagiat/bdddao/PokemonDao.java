@@ -20,6 +20,9 @@ public interface PokemonDao {
     @Query("SELECT * FROM Pokemon WHERE name LIKE :name LIMIT 1")
     Pokemon findByName(String name);
 
+    @Query("SELECT * FROM Pokemon WHERE id = :id LIMIT 1")
+    Pokemon findById(long id);
+
     @Insert
     void insertAll(Pokemon... pokemons);
 

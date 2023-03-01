@@ -14,6 +14,9 @@ public interface AttackDao {
     @Query("SELECT * FROM Attack")
     List<Attack> getAll();
 
+    @Query("SELECT * FROM Attack WHERE Attack.id_pokemon = :idPokemon")
+    List<Attack> getAllByPokemon(long idPokemon);
+
     @Query("SELECT * FROM Attack WHERE id IN (:attackIds)")
     List<Attack> loadAllByIds(long[] attackIds);
 

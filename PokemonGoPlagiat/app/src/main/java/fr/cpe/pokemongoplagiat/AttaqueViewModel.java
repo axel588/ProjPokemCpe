@@ -7,6 +7,13 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 
+import java.util.List;
+
+import fr.cpe.pokemongoplagiat.bdddao.relation.AttackPokemon;
+import fr.cpe.pokemongoplagiat.bdddao.relation.OwnedPokemonPokemon;
+import fr.cpe.pokemongoplagiat.bdddao.relation.WildPokemonPokemon;
+import fr.cpe.pokemongoplagiat.bddmodels.Attack;
+import fr.cpe.pokemongoplagiat.bddmodels.OwnedPokemon;
 import fr.cpe.pokemongoplagiat.bddmodels.Pokemon;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnAnnulerListener;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnAttaqueListener;
@@ -18,7 +25,10 @@ import fr.cpe.pokemongoplagiat.interfaces.OnClickOnInventaireListener;
 public class AttaqueViewModel extends BaseObservable {
 
     private Pokemon pokemonAttaque = new Pokemon();
-    private Pokemon myPokemon = new Pokemon();
+    private WildPokemonPokemon wildPokemonAttaque= new WildPokemonPokemon();
+
+    private OwnedPokemonPokemon ownedPokemon = new  OwnedPokemonPokemon();
+    private Pokemon myPokemon = new  Pokemon();
 
     public OnClickOnAttaqueListener listener;
     public OnClickOnInventaireListener listenerInventaire;
@@ -28,6 +38,8 @@ public class AttaqueViewModel extends BaseObservable {
     public OnClickOnAttaquerPokemonListener listenerAttaquer;
     public OnClickOnAnnulerListener listenerAnnuler;
 
+    public List<Attack> attackPokemonWild;
+    public List<Attack> attackOwnedPokemon;
 
     public void setOnClickOnAttaqueListener(OnClickOnAttaqueListener listener)
     {
@@ -75,6 +87,7 @@ public class AttaqueViewModel extends BaseObservable {
         this.listenerFuire.onClickOnFuire();
     }
 
+
     public void runOnClickOnAttaquerPokemonListener(int idAttaquer)
     {
         this.listenerAttaquer.onClickOnAttaquerPokemon(idAttaquer);
@@ -86,14 +99,49 @@ public class AttaqueViewModel extends BaseObservable {
     }
 
 
-    public void setPokemennAttaque(Pokemon pokemonAttaque)
+    public void setPokemennAttaque(WildPokemonPokemon pokemonAttaque)
     {
-        this.pokemonAttaque = pokemonAttaque;
+        this. wildPokemonAttaque = pokemonAttaque;
+        this.pokemonAttaque = pokemonAttaque.getPokemon();
     }
 
-    public void setMyPokemon(Pokemon myPokemon)
+    public void setMyPokemon(OwnedPokemonPokemon myPokemonRec)
     {
-        this.myPokemon = myPokemon;
+        this.ownedPokemon = myPokemonRec;
+        this.myPokemon = myPokemonRec.getPokemon();
+    }
+
+    public long getDamageMyPokemon (int indexAttack)
+    {
+        if (indexAttack < attackOwnedPokemon.size()) {
+            return attackOwnedPokemon.get(indexAttack).getDamage();
+        }
+        else
+        {
+            return attackOwnedPokemon.get(attackOwnedPokemon.size()-1).getDamage();
+        }
+    }
+
+    public long getDamageWildPokemon (int indexAttack)
+    {
+        if (indexAttack < attackPokemonWild.size()) {
+            return attackPokemonWild.get(indexAttack).getDamage();
+        }
+        else
+        {
+            return attackPokemonWild.get(attackPokemonWild.size()-1).getDamage();
+        }
+    }
+
+    public void subPvMyPokemon(long valeur)
+    {
+        setOwnedPokemonPv((int)(this.ownedPokemon.getOwnedPokemon().getPv() - valeur + this.ownedPokemon.getOwnedPokemon().getLevel()*2));
+    }
+
+    public void subPvWildPokemon(long valeur)
+    {
+        setAttackPokemonPv((int)(this.wildPokemonAttaque.getWildPokemon().getPv() - valeur + this.wildPokemonAttaque.getWildPokemon().getLevel()*2));
+
     }
 
     public Pokemon getPokemonAttaque() {
@@ -104,6 +152,16 @@ public class AttaqueViewModel extends BaseObservable {
         return myPokemon;
     }
 
+    public void setAttackPokemonWild  (List<Attack> attackPokemonWild)
+    {
+        this.attackPokemonWild = attackPokemonWild;
+    }
+
+    public void setAttackOwnedPokemon  (List<Attack> attackOwnedPokemon)
+    {
+        this.attackOwnedPokemon = attackOwnedPokemon;
+    }
+
     @Bindable
     public int getPokemonAttaqueIdType1() {return pokemonAttaque.getType1Img();}
     @Bindable
@@ -112,9 +170,37 @@ public class AttaqueViewModel extends BaseObservable {
     }
 
     @Bindable
+    public int getPvPokemonAttaque(){
+        return (int)(((double)wildPokemonAttaque.getWildPokemon().getPv()/
+                ((double)wildPokemonAttaque.getWildPokemon().getBase_pv()
+                + (double)wildPokemonAttaque.getWildPokemon().getPv_per_level()
+                * (double)wildPokemonAttaque.getWildPokemon().getLevel())
+                )*100.0);};
+
+    @Bindable
+    public int getPvOwnedPokemon(){return (int)(ownedPokemon.getOwnedPokemon().getPv()/(230/ownedPokemon.getOwnedPokemon().getLevel()))*100;};
+
+    @Bindable
     public String getTest()
     {
         return "test";
+    }
+
+
+    public String getNameAttackOwnedPokemon(int i)
+    {
+        if (i < attackOwnedPokemon.size()) {
+            return attackOwnedPokemon.get(i).getTitle();
+        }
+        else
+        {
+            return "Attaque " + i;
+        }
+    }
+
+    public String getNameAttackWildPokemon(int i)
+    {
+        return attackPokemonWild.get(i).getTitle();
     }
 
     public Drawable getPokemonAttaqueFront(Context context) {
@@ -157,6 +243,22 @@ public class AttaqueViewModel extends BaseObservable {
         else
             return null;
     }
+    @Bindable
+    public int getAttackingPokemonPv() {return (int)wildPokemonAttaque.getWildPokemon().getPv();}
+    @Bindable
+    public void setAttackPokemonPv(int pv) {
+        wildPokemonAttaque.getWildPokemon().setPv((long)pv);
+        notifyChange();
+    }
+
+    @Bindable
+    public int getOwnedPokemonPv() {return (int)ownedPokemon.getOwnedPokemon().getPv();}
+    @Bindable
+    public void setOwnedPokemonPv(int pv) {
+        ownedPokemon.getOwnedPokemon().setPv((long)pv);
+        notifyChange();
+    }
+
 
     @Bindable
     public int getMyPokemonIdType1() {return myPokemon.getType1Img();}
