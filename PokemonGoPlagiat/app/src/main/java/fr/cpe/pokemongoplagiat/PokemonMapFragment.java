@@ -3,6 +3,13 @@ package fr.cpe.pokemongoplagiat;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
@@ -29,6 +36,7 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.Overlay;
 import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
@@ -43,10 +51,12 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 
 import fr.cpe.pokemongoplagiat.bdddao.HealStationDao;
+import fr.cpe.pokemongoplagiat.bdddao.PlayerDao;
 import fr.cpe.pokemongoplagiat.bdddao.PokemonDao;
 import fr.cpe.pokemongoplagiat.bdddao.relation.WildPokemonPokemon;
 import fr.cpe.pokemongoplagiat.bdddao.relationdao.WildPokemonPokemonDao;
 import fr.cpe.pokemongoplagiat.bddmodels.HealStation;
+import fr.cpe.pokemongoplagiat.bddmodels.Player;
 import fr.cpe.pokemongoplagiat.bddmodels.Pokemon;
 import fr.cpe.pokemongoplagiat.bddmodels.WildPokemon;
 import fr.cpe.pokemongoplagiat.databinding.PokemonMapBinding;
@@ -168,6 +178,112 @@ public class PokemonMapFragment extends Fragment {
                 R.layout.pokemon_map,container,false);
         PokemonMapViewModel viewModel = new PokemonMapViewModel();
         binding.setPokemonMapViewModel(viewModel);
+        mapView = binding.mapView;
+        Overlay myOverlay = new Overlay() {
+            @Override
+            public void draw(Canvas canvas, MapView mapView, boolean shadow) {
+                // Apply 3D graphics techniques to draw your effect
+                // Example: draw a pyramid at the center of the map
+                int centerX = mapView.getWidth() / 2;
+                int centerY = mapView.getHeight() / 2;
+                Player player = new Player();
+                ExecutorService executorn = Executors.newSingleThreadExecutor();
+                FutureTask<List<Player>> futureTask = new FutureTask<>(new Callable<List<Player>>() {
+                    @Override
+                    public List<Player> call() throws Exception {
+                        AppDatabase db = Room.databaseBuilder(binding.getRoot().getContext(),
+                                AppDatabase.class, "poke-plagiat").build();
+                        PlayerDao pokemonDao = db.playerDao();
+                        List<Player> allpokemon = pokemonDao.getAll();
+
+                        return allpokemon;
+                    }
+                });
+
+                executorn.execute(futureTask);
+
+                try {
+                    player = futureTask.get().get(0);
+                } catch (InterruptedException | ExecutionException e) {
+                    // Handle any exceptions that occurred while executing the task
+                }
+
+// Don't forget to shutdown the executor when it's no longer needed
+                executorn.shutdown();
+
+                // Load image and scale it
+                Bitmap originalImage = BitmapFactory.decodeResource(getResources(), R.drawable.user_logo);
+                Bitmap scaledImage = Bitmap.createScaledBitmap(originalImage, 125, 125, true);
+
+                // Draw scaled image
+                canvas.drawBitmap(scaledImage, 25, 25, null);
+
+                int x_lev = 150;
+                int y_lev = 105;
+                int width_lev = 250;
+                int height_lev = 20;
+                Paint paint = new Paint();
+                paint.setColor(Color.RED);
+                paint.setStyle(Paint.Style.FILL);
+                Path path = new Path();
+                path.moveTo(x_lev, y_lev);
+                path.lineTo(x_lev+width_lev, y_lev+0);
+                path.lineTo(x_lev+width_lev, y_lev+height_lev);
+                path.lineTo(x_lev, y_lev+height_lev);
+                path.lineTo(x_lev, y_lev);
+                canvas.drawPath(path, paint);
+                int width_pas = (int)(width_lev * ((player.getExperience()%100)/100.0));
+                paint = new Paint();
+                paint.setColor(Color.BLUE);
+                paint.setStyle(Paint.Style.FILL);
+                path = new Path();
+                path.moveTo(x_lev, y_lev);
+                path.lineTo(x_lev+width_pas, y_lev+0);
+                path.lineTo(x_lev+width_pas, y_lev+height_lev);
+                path.lineTo(x_lev, y_lev+height_lev);
+                path.lineTo(x_lev, y_lev);
+                canvas.drawPath(path, paint);
+
+                Paint textPaint = new Paint();
+                textPaint.setTextSize(40);
+                textPaint.setColor(Color.BLACK);
+                textPaint.setStyle(Paint.Style.STROKE);
+                textPaint.setStrokeWidth(4);
+                canvas.drawText(player.getName(), 150, 75, textPaint);
+                textPaint.setColor(Color.WHITE);
+                textPaint.setStyle(Paint.Style.FILL);
+                canvas.drawText(player.getName(), 150, 75, textPaint);
+
+
+                int radius = 30;
+                Paint circlePaint = new Paint();
+                circlePaint.setColor(Color.RED);
+                circlePaint.setStyle(Paint.Style.FILL);
+                canvas.drawCircle(450, 115, radius, circlePaint);
+
+                // Draw number in circle
+                textPaint = new Paint();
+                textPaint.setColor(Color.WHITE);
+                textPaint.setTextSize(40);
+                String numberString = (player.getExperience()%100)+""; // Replace with your number
+                Rect bounds = new Rect();
+                textPaint.getTextBounds(numberString, 0, numberString.length(), bounds);
+                float textWidth = bounds.width();
+                float textHeight = bounds.height();
+                canvas.drawText(numberString, 450 - textWidth/2, 115 + textHeight/2, textPaint);
+
+                /*
+                // Draw text message
+                Paint textPaint = new Paint();
+                textPaint.setColor(Color.BLACK);
+
+                textPaint.setTextSize(30);
+                canvas.drawText("My Message", 150, 75, textPaint);*/
+            }
+        };
+
+// Add your custom Overlay to the MapView
+        mapView.getOverlays().add(myOverlay);
 
         /*this.sensorManager = (SensorManager)
                 getActivity().getSystemService(Context.SENSOR_SERVICE);
@@ -299,7 +415,7 @@ public class PokemonMapFragment extends Fragment {
                             //String iconName = "p" + pokemonId;
                             int iconResourceId = pokemonId;//getResources().getIdentifier(iconName, "drawable", getContext().getPackageName());
                             Drawable pokeIcon = ContextCompat.getDrawable(getContext(), iconResourceId);
-
+                            marker.setTitle(pokemon.getPokemon().getName());
                             marker.setPosition(point);
                             // assuming you have a Pokemon icon in your drawable folder
                             marker.setIcon(pokeIcon);
@@ -317,6 +433,7 @@ public class PokemonMapFragment extends Fragment {
                             // Set the marker's info window with the label text
                             //marker.setInfoWindow(new MarkerInfoWindow(R.layout.marker_title_display, mapView));
                             marker.setPosition(point);
+                            marker.setTitle("Heal Station");
                             // assuming you have a Pokemon icon in your drawable folder
                             marker.setIcon(pokeIcon);
                             binding.mapView.getOverlays().add(marker);
@@ -325,7 +442,8 @@ public class PokemonMapFragment extends Fragment {
                     //healStations
 
                     binding.mapView.getController().setCenter(new GeoPoint(latitude, longitude));
-                    binding.mapView.getController().setZoom(18.0);
+                    binding.mapView.getController().setZoom(16.0);
+                    mapView.getOverlays().add(myOverlay);
                 }
 
                 @Override
@@ -395,6 +513,7 @@ public class PokemonMapFragment extends Fragment {
             if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
                     && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
             }
         }
 

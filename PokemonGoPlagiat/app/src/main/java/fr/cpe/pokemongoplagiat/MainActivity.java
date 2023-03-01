@@ -520,7 +520,7 @@ public class MainActivity extends AppCompatActivity {
             player.setGender(1);
             player.setExperience(0);
             player.setMoney(1000);
-            player.setName("Euqi");
+            player.setName("Player Test");
             player.setLat(45.764043);
             player.setLat(4.835659);
 
