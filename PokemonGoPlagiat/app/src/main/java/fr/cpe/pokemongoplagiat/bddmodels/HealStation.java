@@ -3,7 +3,7 @@ package fr.cpe.pokemongoplagiat.bddmodels;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 @Entity
-public class HealStation {
+public class HealStation extends BaseModel {
     public long getId() {
         return id;
     }

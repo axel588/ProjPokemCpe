@@ -6,16 +6,21 @@ import androidx.room.Transaction;
 
 import java.util.List;
 
+//import fr.cpe.pokemongoplagiat.bdddao.IBaseDao;
 import fr.cpe.pokemongoplagiat.bdddao.relation.WildPokemonPokemon;
 
 @Dao
-public interface WildPokemonPokemonDao {
+public abstract class WildPokemonPokemonDao /*extends IBaseDao<WildPokemonPokemon>*/ {
     @Transaction
     @Query("SELECT * FROM WildPokemon INNER JOIN Pokemon ON WildPokemon.id_pokemon = Pokemon.id")
-    public List<WildPokemonPokemon> getAllWildPokemonPokemon();
+    public abstract List<WildPokemonPokemon> getAllWildPokemonPokemon();
+
+    @Transaction
+    @Query("SELECT * FROM WildPokemon INNER JOIN Pokemon ON WildPokemon.id_pokemon = Pokemon.id")
+    public abstract List<WildPokemonPokemon> getAll();
 
     @Transaction
     @Query("SELECT * FROM WildPokemon INNER JOIN Pokemon ON WildPokemon.id_pokemon = Pokemon.id WHERE WildPokemon.id = :wildPokemonId")
-    WildPokemonPokemon getWildPokemonPokemonById(int wildPokemonId);
+    public abstract WildPokemonPokemon getWildPokemonPokemonById(int wildPokemonId);
 
 }

@@ -11,4 +11,20 @@ public class OwnedItemInventory {
     private OwnedItem ownedItem;
     @Relation(parentColumn = "id_inventory", entityColumn = "id")
     private Inventory inventory;
+
+    public OwnedItem getOwnedItem() {
+        return ownedItem;
+    }
+
+    public void setOwnedItem(OwnedItem ownedItem) {
+        this.ownedItem = ownedItem;
+    }
+
+    public Inventory getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(Inventory inventory) {
+        this.inventory = inventory;
+    }
 }

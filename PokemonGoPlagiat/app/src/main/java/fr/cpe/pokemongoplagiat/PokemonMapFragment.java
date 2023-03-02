@@ -33,6 +33,7 @@ import androidx.room.Room;
 
 import org.osmdroid.config.Configuration;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
@@ -60,6 +61,7 @@ import fr.cpe.pokemongoplagiat.bddmodels.Player;
 import fr.cpe.pokemongoplagiat.bddmodels.Pokemon;
 import fr.cpe.pokemongoplagiat.bddmodels.WildPokemon;
 import fr.cpe.pokemongoplagiat.databinding.PokemonMapBinding;
+import fr.cpe.pokemongoplagiat.interfaces.OnClickOnAttackByWildPokemon;
 import fr.cpe.pokemongoplagiat.models.POKEMON_TYPE;
 
 public class PokemonMapFragment extends Fragment {
@@ -155,10 +157,11 @@ public class PokemonMapFragment extends Fragment {
     };
 
 
+    public void setOnClickOnAttackByWildPokemon(OnClickOnAttackByWildPokemon onClickOnAttackByWildPokemon) {
+        this.onClickOnAttackByWildPokemon = onClickOnAttackByWildPokemon;
+    }
 
-
-
-
+    public OnClickOnAttackByWildPokemon onClickOnAttackByWildPokemon;
     private MapView mapView;
     public PokemonMapBinding binding;
     private MyLocationNewOverlay mLocationOverlay;
@@ -419,6 +422,11 @@ public class PokemonMapFragment extends Fragment {
                             marker.setPosition(point);
                             // assuming you have a Pokemon icon in your drawable folder
                             marker.setIcon(pokeIcon);
+                            if(point.distanceToAsDouble(new GeoPoint(latitude, longitude)) <= 50)
+                            {
+                                if(onClickOnAttackByWildPokemon != null)
+                                    onClickOnAttackByWildPokemon.onClickOnAttackByWildPokemon(pokemon);
+                            }
                             binding.mapView.getOverlays().add(marker);
                         }
                     }

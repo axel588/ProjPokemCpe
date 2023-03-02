@@ -11,4 +11,20 @@ public class DiscoveredPokemonPokemon {
     private DiscoveredPokemon discoveredPokemon;
     @Relation(parentColumn = "id_pokemon", entityColumn = "id")
     private Pokemon pokemon;
+
+    public DiscoveredPokemon getDiscoveredPokemon() {
+        return discoveredPokemon;
+    }
+
+    public void setDiscoveredPokemon(DiscoveredPokemon discoveredPokemon) {
+        this.discoveredPokemon = discoveredPokemon;
+    }
+
+    public Pokemon getPokemon() {
+        return pokemon;
+    }
+
+    public void setPokemon(Pokemon pokemon) {
+        this.pokemon = pokemon;
+    }
 }

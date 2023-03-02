@@ -9,7 +9,7 @@ import java.util.List;
 @Entity(
         foreignKeys = @ForeignKey(entity = Player.class, parentColumns = "id", childColumns = "id_player")
 )
-public class Pokedex {
+public class Pokedex extends BaseModel {
     @PrimaryKey(autoGenerate = true)
     private long id;
     private long id_player;

@@ -49,6 +49,11 @@ public class AttaqueFragment extends Fragment {
 
     public AttaqueFragmentBinding binding;
 
+    public void setWildPokemonPokemon(WildPokemonPokemon wildPokemonPokemon) {
+        this.wildPokemonPokemon = wildPokemonPokemon;
+    }
+
+    public WildPokemonPokemon wildPokemonPokemon;
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
@@ -68,7 +73,10 @@ public class AttaqueFragment extends Fragment {
 
         List<OwnedPokemonPokemon> ownedPokemon = new ArrayList<>();
         WildPokemonPokemon pokemonAttaque = getWildPokemon();
-
+        if(wildPokemonPokemon!=null)
+        {
+            pokemonAttaque = wildPokemonPokemon;
+        }
 
 
         Long idPlayer = getIdPlayer();
