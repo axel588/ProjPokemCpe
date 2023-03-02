@@ -50,6 +50,18 @@
             android:layout_height="100dp"
             android:layout_gravity="start"
             />
+
+        <TextView
+            android:id="@+id/myPokemon_kill"
+            app:layout_constraintStart_toStartOf="@id/myPokemon_img"
+            app:layout_constraintBottom_toBottomOf="@id/myPokemon_img"
+            app:layout_constraintTop_toTopOf="@id/myPokemon_img"
+            app:layout_constraintEnd_toEndOf="@id/myPokemon_img"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:background="#55FF0000"/>
+
         <ProgressBar
             android:layout_marginEnd="40dp"
             android:layout_marginTop="5dp"
@@ -113,6 +125,7 @@
             android:background="#555555"
             android:textColor="#FFFFFF"
             android:layout_margin="8dp"
+            android:elevation="1dp"
 
          />
 
@@ -129,6 +142,7 @@
             android:background="#555555"
             android:textColor="#FFFFFF"
             android:layout_margin="8dp"
+            android:elevation="1dp"
             />
 
         <Button
@@ -144,6 +158,7 @@
             android:background="#555555"
             android:textColor="#FFFFFF"
             android:layout_margin="8dp"
+            android:elevation="1dp"
             />
 
 
@@ -163,6 +178,7 @@
             android:layout_marginBottom="50dp"
             android:background="#555555"
             android:textColor="#FFFFFF"
+            android:elevation="1dp"
             />
 
         <Button
@@ -181,6 +197,7 @@
             android:layout_marginEnd = "8dp"
             android:background="#555555"
             android:textColor="#FFFFFF"
+            android:elevation="1dp"
             />
 
         <Button
@@ -199,6 +216,7 @@
             android:layout_marginEnd = "8dp"
             android:background="#555555"
             android:textColor="#FFFFFF"
+            android:elevation="1dp"
             />
 
         <Button
@@ -258,6 +276,7 @@
             android:layout_marginEnd = "8dp"
             android:background="#555555"
             android:textColor="#FFFFFF"
+            android:onClick="@{() -> attaqueViewModel.runOnClickOnEchangerListener()}"
             />
 
         <Button
@@ -275,7 +294,6 @@
             android:layout_marginEnd = "15dp"
             android:onClick="@{() -> attaqueViewModel.RunArgent()}"
 
-
             />
 
 
@@ -284,7 +302,7 @@
             android:id="@+id/button_gagne"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:text="Vous avez gangé !"
+            android:text="Vous avez gagné !"
             android:onClick="@{() ->attaqueViewModel.runOnClickOnFuireListener()}"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

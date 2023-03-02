@@ -36,6 +36,9 @@ import fr.cpe.pokemongoplagiat.bddmodels.WildPokemon;
 import fr.cpe.pokemongoplagiat.databinding.ActivityMainBinding;
 
 //import fr.cpe.pokemongoplagiat.generated.callback.OnClickListener;
+
+import fr.cpe.pokemongoplagiat.interfaces.OnClickOnEchangerListener;
+import fr.cpe.pokemongoplagiat.interfaces.OnClickOnEchangerPokemonListener;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnAttackByWildPokemon;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnFuireListener;
 
@@ -152,6 +155,53 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+
+
+        OnClickOnFuireListener FuireListnerAgent = new OnClickOnFuireListener ()
+        {
+            @Override
+            public void onClickOnFuire()
+            {
+                FragmentTransaction transaction = manager.beginTransaction();
+                PokemonMapFragment fragment = new PokemonMapFragment();
+                transaction.replace(R.id.fragment_container,fragment);
+                binding.bottomNavigation.setSelectedItemId(R.id.maps);
+                transaction.commit();
+            }
+        };
+
+        OnClickOnEchangerListener echangerListener = new OnClickOnEchangerListener(){
+            @Override
+            public void onClickOnEchanger(){
+
+                FragmentTransaction transaction = manager.beginTransaction();
+                PokemonTeamEchangeFragment fragment = new PokemonTeamEchangeFragment();
+                transaction.replace(R.id.fragment_container,fragment);
+                //fragment.setOnClickOnPokemonFromListListener(listener_one_pokemon);
+                //fragment.setOnClickOnEchangerPokemonListener(listener_one_pokemon);
+                transaction.commit();
+            }
+
+        };
+
+        OnClickOnEchangerPokemonListener echangerPokemonListener = new OnClickOnEchangerPokemonListener(){
+            @Override
+            public void onClickOnEchangerPokemon(long idOwnedPokemon){
+                FragmentTransaction transaction = manager.beginTransaction();
+                AttaqueFragment fragment = new AttaqueFragment();
+                fragment.setOnClickOnFuireListener(FuireListnerAgent);
+                transaction.replace(R.id.fragment_container,fragment);
+                fragment.setOnClickOnEchnagerListener(echangerListener);
+                transaction.commit();
+            }
+
+        };
+
+
+
+
+
+
         OnClickOnMenuListener listener_on_menu = new OnClickOnMenuListener() {
             @Override
             public void onClickOnItem(int index) {
@@ -168,6 +218,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         };
+
 
         OnClickOnAttackByWildPokemon listener_on_wild_attack = new OnClickOnAttackByWildPokemon() {
             @Override
@@ -200,6 +251,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+
         binding.bottomNavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -229,27 +281,19 @@ public class MainActivity extends AppCompatActivity {
                     AttaqueFragment fragment = attaqueFragment;
 
 
-                    OnClickOnFuireListener FuireListnerAgent = new OnClickOnFuireListener ()
-                    {
-                        @Override
-                        public void onClickOnFuire()
-                        {
-                            FragmentTransaction transaction = manager.beginTransaction();
-                            PokemonMapFragment fragment = new PokemonMapFragment();
-                            transaction.replace(R.id.fragment_container,fragment);
-                            binding.bottomNavigation.setSelectedItemId(R.id.maps);
-                            transaction.commit();
-                        }
-                    };
+
 
                     fragment.setOnClickOnFuireListener(FuireListnerAgent);
                     transaction.replace(R.id.fragment_container,fragment);
-
+                    fragment.setOnClickOnEchnagerListener(echangerListener);
                     transaction.commit();
                     return true;
                 }
                 if (item.getItemId() == R.id.mes_pokemon)
                 {
+
+                    PokemonTeamFragment fragment = new PokemonTeamFragment();
+
                     AttaqueFragment fragment = attaqueFragment;
 
 
@@ -267,8 +311,10 @@ public class MainActivity extends AppCompatActivity {
                     };
 
                     fragment.setOnClickOnFuireListener(FuireListnerAgent);
-                    transaction.replace(R.id.fragment_container,fragment);
 
+                    transaction.replace(R.id.fragment_container,fragment);
+                    fragment.setOnClickOnNoteListener(listener);
+                    fragment.setOnClickOnPokemonFromListListener(listener_one_pokemon);
                     transaction.commit();
                     return true;
                 }

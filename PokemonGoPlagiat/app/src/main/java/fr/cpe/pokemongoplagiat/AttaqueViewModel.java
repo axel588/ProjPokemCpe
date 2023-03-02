@@ -19,6 +19,7 @@ import fr.cpe.pokemongoplagiat.interfaces.OnClickOnAnnulerListener;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnAttaqueListener;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnAttaquerPokemonListener;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnEchangerListener;
+import fr.cpe.pokemongoplagiat.interfaces.OnClickOnEchangerPokemonListener;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnFuireListener;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnInventaireListener;
 
@@ -38,6 +39,8 @@ public class AttaqueViewModel extends BaseObservable {
     public OnClickOnAttaquerPokemonListener listenerAttaquer;
     public OnClickOnAnnulerListener listenerAnnuler;
 
+    public OnClickOnEchangerPokemonListener listenerEchangerPokemon;
+
     public List<Attack> attackPokemonWild;
     public List<Attack> attackOwnedPokemon;
 
@@ -45,6 +48,8 @@ public class AttaqueViewModel extends BaseObservable {
     {
         this.listener = listener;
     }
+
+
 
     public void setOnClickOnInventaireListener(OnClickOnInventaireListener  listener)
     {
