@@ -16,7 +16,7 @@ import java.sql.Date;
                 @ForeignKey(entity = Pokedex.class, parentColumns = "id", childColumns = "id_pokedex")
         }
         )
-public class DiscoveredPokemon {
+public class DiscoveredPokemon extends BaseModel {
     public long getId() {
         return id;
     }

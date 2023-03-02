@@ -5,7 +5,7 @@ import androidx.room.PrimaryKey;
 
 import java.util.List;
 @Entity
-public class Item {
+public class Item extends BaseModel {
     public long getId() {
         return id;
     }

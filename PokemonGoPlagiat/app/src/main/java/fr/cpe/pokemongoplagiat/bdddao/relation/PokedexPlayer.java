@@ -11,4 +11,20 @@ public class PokedexPlayer {
     private Pokedex pokedex;
     @Relation(parentColumn = "id_player", entityColumn = "id")
     private Player player;
+
+    public Pokedex getPokedex() {
+        return pokedex;
+    }
+
+    public void setPokedex(Pokedex pokedex) {
+        this.pokedex = pokedex;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
 }

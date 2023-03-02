@@ -10,7 +10,7 @@ import androidx.room.PrimaryKey;
                 @ForeignKey(entity = Inventory.class, parentColumns = "id", childColumns = "id_inventory")
         }
 )
-public class OwnedItem {
+public class OwnedItem extends BaseModel {
     public long getId() {
         return id;
     }

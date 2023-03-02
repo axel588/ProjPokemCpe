@@ -6,7 +6,7 @@ import androidx.room.Relation;
 
 import java.util.List;
 @Entity
-public class Player {
+public class Player extends BaseModel {
     public long getId() {
         return id;
     }
