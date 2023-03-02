@@ -12,7 +12,7 @@ import java.util.List;
                 @ForeignKey(entity = PokemonTeam.class, parentColumns = "id", childColumns = "id_pokemon_team")
         }
 )
-public class OwnedPokemon {
+public class OwnedPokemon extends BaseModel {
     public long getId() {
         return id;
     }

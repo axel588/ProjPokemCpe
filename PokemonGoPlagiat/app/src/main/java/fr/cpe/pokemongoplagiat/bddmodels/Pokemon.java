@@ -10,7 +10,7 @@ import fr.cpe.pokemongoplagiat.R;
 import fr.cpe.pokemongoplagiat.models.POKEMON_TYPE;
 
 @Entity
-public class Pokemon {
+public class Pokemon extends BaseModel {
     @PrimaryKey(autoGenerate = true)
     private long id;
     private long order;

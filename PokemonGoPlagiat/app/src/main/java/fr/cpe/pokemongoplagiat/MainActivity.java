@@ -20,6 +20,7 @@ import fr.cpe.pokemongoplagiat.bdddao.PokedexDao;
 import fr.cpe.pokemongoplagiat.bdddao.PokemonDao;
 import fr.cpe.pokemongoplagiat.bdddao.PokemonTeamDao;
 import fr.cpe.pokemongoplagiat.bdddao.WildPokemonDao;
+import fr.cpe.pokemongoplagiat.bdddao.relation.WildPokemonPokemon;
 import fr.cpe.pokemongoplagiat.bddmodels.Attack;
 import fr.cpe.pokemongoplagiat.bddmodels.DiscoveredPokemon;
 import fr.cpe.pokemongoplagiat.bddmodels.HealStation;
@@ -35,6 +36,7 @@ import fr.cpe.pokemongoplagiat.bddmodels.WildPokemon;
 import fr.cpe.pokemongoplagiat.databinding.ActivityMainBinding;
 
 //import fr.cpe.pokemongoplagiat.generated.callback.OnClickListener;
+import fr.cpe.pokemongoplagiat.interfaces.OnClickOnAttackByWildPokemon;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnFuireListener;
 
 //import fr.cpe.pokemongoplagiat.generated.callback.OnClickListener;
@@ -65,10 +67,13 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
 
+    public AttaqueFragment attaqueFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        attaqueFragment = new AttaqueFragment();
         showStartup();
 
         /*AppDatabase db = Room.databaseBuilder(getApplicationContext(),
@@ -164,6 +169,37 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+        OnClickOnAttackByWildPokemon listener_on_wild_attack = new OnClickOnAttackByWildPokemon() {
+            @Override
+            public void onClickOnAttackByWildPokemon(WildPokemonPokemon pokemon) {
+                FragmentTransaction transaction = manager.beginTransaction();
+                // First, get the context of the current activity or application
+                if(pokemon != null)
+                {
+                    OnClickOnFuireListener FuireListnerAgent = new OnClickOnFuireListener ()
+                    {
+                        @Override
+                        public void onClickOnFuire()
+                        {
+                            FragmentTransaction transaction = manager.beginTransaction();
+                            PokemonMapFragment fragment = new PokemonMapFragment();
+                            transaction.replace(R.id.fragment_container,fragment);
+                            binding.bottomNavigation.setSelectedItemId(R.id.maps);
+                            transaction.commit();
+                        }
+                    };
+
+
+                    AttaqueFragment fragment = attaqueFragment;
+                    fragment.setWildPokemonPokemon(pokemon);
+                    fragment.setOnClickOnFuireListener(FuireListnerAgent);
+                    transaction.replace(R.id.fragment_container,fragment);
+                    transaction.commit();
+                }
+
+            }
+        };
+
         binding.bottomNavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -183,13 +219,14 @@ public class MainActivity extends AppCompatActivity {
                 if(item.getItemId() == R.id.maps)
                 {
                     PokemonMapFragment fragment = new PokemonMapFragment();
+                    fragment.setOnClickOnAttackByWildPokemon(listener_on_wild_attack);
                     transaction.replace(R.id.fragment_container,fragment);
                     transaction.commit();
                     return true;
                 }
                 if (item.getItemId() == R.id.inventory)
                 {
-                    AttaqueFragment fragment = new AttaqueFragment();
+                    AttaqueFragment fragment = attaqueFragment;
 
 
                     OnClickOnFuireListener FuireListnerAgent = new OnClickOnFuireListener ()
@@ -213,7 +250,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if (item.getItemId() == R.id.mes_pokemon)
                 {
-                    AttaqueFragment fragment = new AttaqueFragment();
+                    AttaqueFragment fragment = attaqueFragment;
 
 
                     OnClickOnFuireListener FuireListnerAgent = new OnClickOnFuireListener ()
@@ -251,13 +288,14 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.fragment_container,fragment);
         transaction.commit();
     }
-
+    public static AppDatabase database;
     void insertDB()
     {
         AppDatabase db = Room.databaseBuilder(getApplicationContext(),
                 AppDatabase.class, "poke-plagiat")
                 .fallbackToDestructiveMigration()
                 .build();
+        database = db;
         db.wildPokemonDao().deleteAll();
         db.competitionStadiumDao().deleteAll();
         db.ownedItemDao().deleteAll();

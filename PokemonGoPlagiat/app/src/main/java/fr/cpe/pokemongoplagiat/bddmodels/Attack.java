@@ -11,7 +11,7 @@ import java.util.List;
 @Entity(
         foreignKeys = @ForeignKey(entity = Pokemon.class, parentColumns = "id", childColumns = "id_pokemon")
 )
-public class Attack {
+public class Attack extends BaseModel{
     public long getId() {
         return id;
     }

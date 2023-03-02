@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey;
 @Entity(
         foreignKeys = @ForeignKey(entity = Pokemon.class, parentColumns = "id", childColumns = "id_pokemon")
 )
-public class WildPokemon {
+public class WildPokemon extends BaseModel {
     @PrimaryKey(autoGenerate = true)
     private long id;
     private double lat;
