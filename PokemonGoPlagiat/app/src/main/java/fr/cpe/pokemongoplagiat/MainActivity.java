@@ -164,6 +164,20 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+        OnClickOnEchangerListener echangerListener = new OnClickOnEchangerListener(){
+            @Override
+            public void onClickOnEchanger(){
+
+                FragmentTransaction transaction = manager.beginTransaction();
+                PokemonTeamEchangeFragment fragment = new PokemonTeamEchangeFragment();
+                transaction.replace(R.id.fragment_container,fragment);
+                //fragment.setOnClickOnPokemonFromListListener(listener_one_pokemon);
+                //fragment.setOnClickOnEchangerPokemonListener(listener_one_pokemon);
+                transaction.commit();
+            }
+
+        };
+
         OnClickOnEchangerPokemonListener echangerPokemonListener = new OnClickOnEchangerPokemonListener(){
             @Override
             public void onClickOnEchangerPokemon(long idOwnedPokemon){
@@ -177,19 +191,7 @@ public class MainActivity extends AppCompatActivity {
 
         };
 
-        OnClickOnEchangerListener echangerListener = new OnClickOnEchangerListener(){
-            @Override
-            public void onClickOnEchanger(){
 
-                FragmentTransaction transaction = manager.beginTransaction();
-                PokemonTeamEchangeFragment fragment = new PokemonTeamEchangeFragment();
-                transaction.replace(R.id.fragment_container,fragment);
-                //fragment.setOnClickOnPokemonFromListListener(listener_one_pokemon);
-                fragment.setOnClickOnEchangerPokemonListener(echangerPokemonListener);
-                transaction.commit();
-            }
-
-        };
 
 
 
