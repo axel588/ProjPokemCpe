@@ -35,6 +35,8 @@ import fr.cpe.pokemongoplagiat.bddmodels.WildPokemon;
 import fr.cpe.pokemongoplagiat.databinding.ActivityMainBinding;
 
 //import fr.cpe.pokemongoplagiat.generated.callback.OnClickListener;
+import fr.cpe.pokemongoplagiat.interfaces.OnClickOnEchangerListener;
+import fr.cpe.pokemongoplagiat.interfaces.OnClickOnEchangerPokemonListener;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnFuireListener;
 
 //import fr.cpe.pokemongoplagiat.generated.callback.OnClickListener;
@@ -147,6 +149,51 @@ public class MainActivity extends AppCompatActivity {
             }
         };
 
+
+
+        OnClickOnFuireListener FuireListnerAgent = new OnClickOnFuireListener ()
+        {
+            @Override
+            public void onClickOnFuire()
+            {
+                FragmentTransaction transaction = manager.beginTransaction();
+                PokemonMapFragment fragment = new PokemonMapFragment();
+                transaction.replace(R.id.fragment_container,fragment);
+                binding.bottomNavigation.setSelectedItemId(R.id.maps);
+                transaction.commit();
+            }
+        };
+
+        OnClickOnEchangerPokemonListener echangerPokemonListener = new OnClickOnEchangerPokemonListener(){
+            @Override
+            public void onClickOnEchangerPokemon(long idOwnedPokemon){
+                FragmentTransaction transaction = manager.beginTransaction();
+                AttaqueFragment fragment = new AttaqueFragment();
+                fragment.setOnClickOnFuireListener(FuireListnerAgent);
+                transaction.replace(R.id.fragment_container,fragment);
+                fragment.setOnClickOnEchnagerListener(echangerListener);
+                transaction.commit();
+            }
+
+        };
+
+        OnClickOnEchangerListener echangerListener = new OnClickOnEchangerListener(){
+            @Override
+            public void onClickOnEchanger(){
+
+                FragmentTransaction transaction = manager.beginTransaction();
+                PokemonTeamEchangeFragment fragment = new PokemonTeamEchangeFragment();
+                transaction.replace(R.id.fragment_container,fragment);
+                //fragment.setOnClickOnPokemonFromListListener(listener_one_pokemon);
+                fragment.setOnClickOnEchangerPokemonListener(echangerPokemonListener);
+                transaction.commit();
+            }
+
+        };
+
+
+
+
         OnClickOnMenuListener listener_on_menu = new OnClickOnMenuListener() {
             @Override
             public void onClickOnItem(int index) {
@@ -163,6 +210,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         };
+
+
 
         binding.bottomNavigation.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
@@ -192,46 +241,20 @@ public class MainActivity extends AppCompatActivity {
                     AttaqueFragment fragment = new AttaqueFragment();
 
 
-                    OnClickOnFuireListener FuireListnerAgent = new OnClickOnFuireListener ()
-                    {
-                        @Override
-                        public void onClickOnFuire()
-                        {
-                            FragmentTransaction transaction = manager.beginTransaction();
-                            PokemonMapFragment fragment = new PokemonMapFragment();
-                            transaction.replace(R.id.fragment_container,fragment);
-                            binding.bottomNavigation.setSelectedItemId(R.id.maps);
-                            transaction.commit();
-                        }
-                    };
+
 
                     fragment.setOnClickOnFuireListener(FuireListnerAgent);
                     transaction.replace(R.id.fragment_container,fragment);
-
+                    fragment.setOnClickOnEchnagerListener(echangerListener);
                     transaction.commit();
                     return true;
                 }
                 if (item.getItemId() == R.id.mes_pokemon)
                 {
-                    AttaqueFragment fragment = new AttaqueFragment();
-
-
-                    OnClickOnFuireListener FuireListnerAgent = new OnClickOnFuireListener ()
-                    {
-                        @Override
-                        public void onClickOnFuire()
-                        {
-                            FragmentTransaction transaction = manager.beginTransaction();
-                            PokemonMapFragment fragment = new PokemonMapFragment();
-                            transaction.replace(R.id.fragment_container,fragment);
-                            binding.bottomNavigation.setSelectedItemId(R.id.maps);
-                            transaction.commit();
-                        }
-                    };
-
-                    fragment.setOnClickOnFuireListener(FuireListnerAgent);
+                    PokemonTeamFragment fragment = new PokemonTeamFragment();
                     transaction.replace(R.id.fragment_container,fragment);
-
+                    fragment.setOnClickOnNoteListener(listener);
+                    fragment.setOnClickOnPokemonFromListListener(listener_one_pokemon);
                     transaction.commit();
                     return true;
                 }

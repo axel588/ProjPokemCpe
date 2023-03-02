@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.room.Room;
 
 import java.util.ArrayList;
@@ -35,6 +37,8 @@ import fr.cpe.pokemongoplagiat.databinding.AttaqueFragmentBinding;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnAnnulerListener;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnAttaqueListener;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnAttaquerPokemonListener;
+import fr.cpe.pokemongoplagiat.interfaces.OnClickOnEchangerListener;
+import fr.cpe.pokemongoplagiat.interfaces.OnClickOnEchangerPokemonListener;
 import fr.cpe.pokemongoplagiat.interfaces.OnClickOnFuireListener;
 import fr.cpe.pokemongoplagiat.models.POKEMON_TYPE;
 
@@ -54,6 +58,13 @@ public class AttaqueFragment extends Fragment {
                 R.layout.attaque_fragment,container,false);
 
         binding.buttonGagne.setVisibility(View.GONE);
+        binding.myPokemonKill.setVisibility(View.GONE);
+        binding.buttonAttaque1.setEnabled(false);
+        binding.buttonAttaque2.setEnabled(false);
+        binding.buttonAttaque3.setEnabled(false);
+        binding.buttonAttaque4.setEnabled(false);
+        binding.buttonAttaque5.setEnabled(false);
+        binding.buttonAttaque6.setEnabled(false);
 
         List<OwnedPokemonPokemon> ownedPokemon = new ArrayList<>();
         WildPokemonPokemon pokemonAttaque = getWildPokemon();
@@ -81,13 +92,24 @@ public class AttaqueFragment extends Fragment {
             @Override
             public void onClickOnAttaque()
             {
-                binding.buttonAttaquer.setVisibility(View.GONE);
-                binding.buttonFuir.setVisibility(View.GONE);
-                binding.buttonInventaire.setVisibility(View.GONE);
-                binding.buttonEchanger.setVisibility(View.GONE);
-                binding.buttonAnnuler.setVisibility(View.VISIBLE);
+                if (viewModel.getPvOwnedPokemon() > 0) {
+                    binding.buttonAttaquer.setVisibility(View.GONE);
+                    binding.buttonFuir.setVisibility(View.GONE);
+                    binding.buttonInventaire.setVisibility(View.GONE);
+                    binding.buttonEchanger.setVisibility(View.GONE);
+                    binding.buttonAnnuler.setVisibility(View.VISIBLE);
+
+                    binding.buttonAttaque1.setEnabled(true);
+                    binding.buttonAttaque2.setEnabled(true);
+                    binding.buttonAttaque3.setEnabled(true);
+                    binding.buttonAttaque4.setEnabled(true);
+                    binding.buttonAttaque5.setEnabled(true);
+                    binding.buttonAttaque6.setEnabled(true);
+                }
             }
         };
+
+
 
         OnClickOnAnnulerListener annulerListnerAgent = new OnClickOnAnnulerListener ()
         {
@@ -117,19 +139,46 @@ public class AttaqueFragment extends Fragment {
                         dammage = viewModel.getDamageWildPokemon(val);
                         viewModel.subPvMyPokemon(dammage);
                         if (viewModel.getPvOwnedPokemon() <= 0) {
+
+
+                            binding.buttonAttaque1.setEnabled(false);
+                            binding.buttonAttaque2.setEnabled(false);
+                            binding.buttonAttaque3.setEnabled(false);
+                            binding.buttonAttaque4.setEnabled(false);
+                            binding.buttonAttaque5.setEnabled(false);
+                            binding.buttonAttaque6.setEnabled(false);
+
                             binding.buttonAttaquer.setVisibility(View.VISIBLE);
                             binding.buttonFuir.setVisibility(View.VISIBLE);
                             binding.buttonInventaire.setVisibility(View.VISIBLE);
                             binding.buttonEchanger.setVisibility(View.VISIBLE);
                             binding.buttonAnnuler.setVisibility(View.GONE);
+                            binding.myPokemonKill.setVisibility(View.VISIBLE);
+
+
                         }
 
                     } else {
+                        binding.buttonAttaque1.setEnabled(false);
+                        binding.buttonAttaque2.setEnabled(false);
+                        binding.buttonAttaque3.setEnabled(false);
+                        binding.buttonAttaque4.setEnabled(false);
+                        binding.buttonAttaque5.setEnabled(false);
+                        binding.buttonAttaque6.setEnabled(false);
+
                         binding.buttonGagne.setVisibility(View.VISIBLE);
                     }
                 }
                 else
                 {
+                    binding.buttonAttaque1.setEnabled(false);
+                    binding.buttonAttaque2.setEnabled(false);
+                    binding.buttonAttaque3.setEnabled(false);
+                    binding.buttonAttaque4.setEnabled(false);
+                    binding.buttonAttaque5.setEnabled(false);
+                    binding.buttonAttaque6.setEnabled(false);
+
+                    binding.myPokemonKill.setVisibility(View.VISIBLE);
                     binding.buttonAttaquer.setVisibility(View.VISIBLE);
                     binding.buttonFuir.setVisibility(View.VISIBLE);
                     binding.buttonInventaire.setVisibility(View.VISIBLE);
@@ -157,6 +206,12 @@ public class AttaqueFragment extends Fragment {
     {
         viewModel.setOnClickOnFuireListener(listener);
     }
+
+    public void setOnClickOnEchnagerListener(OnClickOnEchangerListener listener)
+    {
+        viewModel.setOnClickOnEchangerListener(listener);
+    }
+
 
     public List<OwnedPokemonPokemon> getMyPokemon(Long idPlayer)
     {
